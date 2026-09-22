@@ -1,5 +1,5 @@
-const CACHE_NAME = 'raspisanie-v7';
-const APP_SHELL = ['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE_NAME = 'raspisanie-v10';
+const APP_SHELL = ['./','./index.html','./manifest.webmanifest','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-1024.png'];
 
 self.addEventListener('install', event => {
   self.skipWaiting();

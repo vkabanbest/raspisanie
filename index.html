@@ -1,198 +1,132 @@
-<!-- APP_VERSION: 7 -->
+<!-- APP_VERSION: 10 -->
 <!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#007AFF">
+<meta name="theme-color" content="#718A5A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Расписание">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-180.png">
 <title>Расписание</title>
 <style>
 :root{
-  --bg:#f4f5fb;
-  --card:rgba(255,255,255,.92);
-  --text:#17181c;
-  --muted:#777b87;
-  --line:#e9e9ef;
-  --blue:#5b5ce2;
-  --purple:#8b5cf6;
-  --green:#20b86b;
-  --orange:#f59e0b;
-  --shadow:0 12px 35px rgba(35,35,70,.09);
+  --bg:#f6f2e9;
+  --bg2:#eee9dd;
+  --card:rgba(255,252,245,.88);
+  --text:#20251f;
+  --muted:#7d8379;
+  --line:#e6e0d4;
+  --sage:#6f8f72;
+  --sage-dark:#3f6248;
+  --sage-soft:#dce9d9;
+  --olive:#9a9a62;
+  --peach:#e8a06e;
+  --peach-soft:#f8dfca;
+  --cream:#fffaf0;
+  --shadow:0 14px 38px rgba(75,69,51,.10);
 }
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{
-  margin:0;
-  min-height:100vh;
-  color:var(--text);
+  margin:0;min-height:100vh;color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
   background:
-    radial-gradient(circle at 100% 0%, rgba(139,92,246,.16), transparent 30%),
-    radial-gradient(circle at 0% 18%, rgba(91,92,226,.12), transparent 28%),
-    var(--bg);
+    radial-gradient(circle at 100% 0%,rgba(111,143,114,.22),transparent 28%),
+    radial-gradient(circle at 0% 25%,rgba(232,160,110,.14),transparent 27%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
   padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
 }
 button{font:inherit;-webkit-tap-highlight-color:transparent}
-.app{max-width:760px;margin:auto;padding-bottom:28px}
-
-header{
-  padding:22px 3px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-h1{
-  font-size:34px;
-  line-height:1;
-  letter-spacing:-1.4px;
-  margin:0;
-  font-weight:800;
-}
-.sub{
-  font-size:14px;
-  color:var(--muted);
-  margin-top:7px;
-  font-weight:550;
-}
+.app{max-width:760px;margin:auto;padding-bottom:34px}
+header{padding:22px 3px 13px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
+.sub{font-size:14px;color:var(--muted);margin-top:8px;font-weight:600}
 .iconbtn{
   width:44px;height:44px;border-radius:15px;border:1px solid rgba(255,255,255,.75);
-  background:rgba(255,255,255,.72);
-  color:var(--blue);
-  font-size:20px;
-  box-shadow:0 7px 20px rgba(35,35,70,.09);
-  backdrop-filter:blur(18px);
+  background:rgba(255,252,245,.72);color:var(--sage-dark);font-size:22px;
+  box-shadow:0 7px 20px rgba(75,69,51,.09);backdrop-filter:blur(18px)
 }
-
-.days{
-  display:flex;gap:8px;overflow-x:auto;padding:2px 0 15px;
-  scrollbar-width:none;
-}
+.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 15px;scrollbar-width:none}
 .days::-webkit-scrollbar{display:none}
 .day{
-  min-width:53px;
-  border:0;
-  border-radius:17px;
-  background:rgba(255,255,255,.48);
-  padding:9px 8px 8px;
-  color:#747783;
-  font-weight:700;
-  transition:.2s ease;
+  min-width:54px;border:0;border-radius:17px;background:rgba(255,252,245,.54);
+  padding:9px 8px 8px;color:#81867d;font-weight:750;transition:.2s ease;
 }
-.day b{display:block;font-size:16px;color:inherit}
-.day small{display:block;font-size:9px;line-height:12px;margin-top:2px;min-height:12px}
-.day.active{
-  background:#1d1e25;
-  color:#fff;
-  box-shadow:0 8px 18px rgba(20,20,30,.18);
-  transform:translateY(-1px);
-}
-.day.today:not(.active) b{color:var(--blue)}
-.day.today:not(.active){box-shadow:inset 0 0 0 1.5px rgba(91,92,226,.18)}
+.day b{display:block;font-size:16px;color:inherit}.day small{display:block;font-size:9px;line-height:12px;margin-top:2px;min-height:12px}
+.day.active{background:var(--sage-dark);color:#fff;box-shadow:0 8px 18px rgba(63,98,72,.22);transform:translateY(-1px)}
+.day.today:not(.active) b{color:var(--sage-dark)}
+.day.today:not(.active){box-shadow:inset 0 0 0 1.5px rgba(111,143,114,.28)}
 
 .hero{
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(135deg,#6566eb 0%,#8a5cf6 55%,#a56cf5 100%);
-  color:white;
-  border-radius:28px;
-  padding:21px 20px 19px;
-  margin-bottom:14px;
-  box-shadow:0 16px 34px rgba(91,92,226,.24);
+  position:relative;overflow:hidden;background:linear-gradient(135deg,#5e7e63 0%,#789978 52%,#9a9a62 100%);
+  color:#fff;border-radius:29px;padding:21px 20px 19px;margin-bottom:13px;
+  box-shadow:0 17px 36px rgba(74,101,75,.22)
 }
-.hero:before,.hero:after{
-  content:"";position:absolute;border-radius:50%;pointer-events:none;
-  background:rgba(255,255,255,.11);
-}
-.hero:before{width:150px;height:150px;right:-48px;top:-62px}
-.hero:after{width:90px;height:90px;right:45px;bottom:-55px}
-.hero>*{position:relative;z-index:1}
-.hero .label{
-  font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;
-  opacity:.78;
-}
-.hero h2{font-size:25px;line-height:1.15;margin:7px 0 5px;letter-spacing:-.5px}
-.hero .time{font-size:15px;color:rgba(255,255,255,.88);font-weight:550}
-.progress{
-  height:6px;background:rgba(255,255,255,.25);border-radius:10px;margin-top:16px;overflow:hidden
-}
-.progress i{display:block;height:100%;width:58%;background:#fff;border-radius:10px}
-.hero:has(.time){}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}
+.hero:before{width:175px;height:175px;right:-65px;top:-70px}.hero:after{width:100px;height:100px;right:42px;bottom:-62px}
+.hero>*{position:relative;z-index:1}.hero .label{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.8px;opacity:.78}
+.hero h2{font-size:26px;line-height:1.12;margin:7px 0 5px;letter-spacing:-.55px}.hero .time{font-size:15px;color:rgba(255,255,255,.9);font-weight:600}
+.progress{height:6px;background:rgba(255,255,255,.24);border-radius:10px;margin-top:16px;overflow:hidden}.progress i{display:block;height:100%;background:#fff;border-radius:10px}
+.hero.next{background:linear-gradient(135deg,#a8744e,#c28a5d 55%,#9b9860);box-shadow:0 15px 32px rgba(156,116,75,.18)}
+.hero .nextline{font-size:13px;margin-top:10px;opacity:.9}
 
-.section{
-  font-size:11px;color:#8a8d98;font-weight:800;text-transform:uppercase;
-  letter-spacing:.7px;margin:18px 5px 8px;
-}
-.card{
-  background:var(--card);
-  border:1px solid rgba(255,255,255,.85);
-  border-radius:22px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(16px);
-}
-.item{
-  display:grid;
-  grid-template-columns:72px 1fr auto;
-  gap:11px;
-  padding:15px 14px;
-  border-bottom:1px solid var(--line);
-  align-items:center;
-  transition:background .2s ease;
-}
-.item:last-child{border:0}
-.item.current{
-  background:linear-gradient(90deg,rgba(32,184,107,.10),rgba(32,184,107,.025));
-  box-shadow:inset 4px 0 var(--green);
-}
-.item.done{opacity:.46}
-.time{
-  font-size:10.5px;color:#888c98;font-weight:800;line-height:1.4;
-}
-.title{font-size:16px;font-weight:720;letter-spacing:-.15px}
-.meta{font-size:12px;color:#8a8d98;margin-top:4px}
-.badge{
-  font-size:9px;font-weight:800;padding:6px 8px;border-radius:9px;
-  white-space:nowrap;
-}
-.gym{background:#e4e7ff;color:#5557c9}
-.smart{background:#ddf7e9;color:#15945a}
-.private{background:#fff0d9;color:#bc7610}
-.other{background:#ededf2;color:#70727b}
+.section{font-size:11px;color:#85897f;font-weight:850;text-transform:uppercase;letter-spacing:.75px;margin:18px 5px 8px}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.88);border-radius:23px;overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.item{display:grid;grid-template-columns:72px 1fr auto;gap:11px;padding:15px 14px;border-bottom:1px solid var(--line);align-items:center;transition:.2s ease}
+.item:last-child{border:0}.item.current{background:linear-gradient(90deg,rgba(111,143,114,.14),rgba(111,143,114,.025));box-shadow:inset 4px 0 var(--sage)}
+.item.done{opacity:.45}
+.time{font-size:10.5px;color:#878b83;font-weight:850;line-height:1.4}.title{font-size:16px;font-weight:730;letter-spacing:-.15px}.meta{font-size:12px;color:#8a8d84;margin-top:4px}
+.badge{font-size:9px;font-weight:850;padding:6px 8px;border-radius:9px;white-space:nowrap}
+.gym{background:#e4e8df;color:#506a54}.smart{background:var(--sage-soft);color:#397047}.private{background:var(--peach-soft);color:#aa663a}.other{background:#ece9df;color:#77786e}
+.custom{background:#ece7ce;color:#79733e}
 .empty{padding:38px 20px;text-align:center;color:var(--muted);font-weight:550}
-
 .actions{display:flex;gap:8px;margin:11px 0}
 .actions button{
-  flex:1;border:0;background:rgba(255,255,255,.78);border-radius:15px;padding:11px;
-  font-weight:700;color:var(--blue);box-shadow:0 5px 16px rgba(35,35,70,.06);
-  border:1px solid rgba(255,255,255,.8);
+  flex:1;border:0;background:rgba(255,252,245,.78);border-radius:16px;padding:12px 11px;
+  font-weight:760;color:var(--sage-dark);box-shadow:0 5px 16px rgba(75,69,51,.06);border:1px solid rgba(255,255,255,.8)
 }
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:11px 0}
+.quick button{border:0;border-radius:16px;padding:12px;background:rgba(255,252,245,.72);color:var(--text);font-weight:700;box-shadow:0 5px 16px rgba(75,69,51,.06)}
+.quick button:first-child{background:var(--sage-dark);color:#fff}
 .install{display:none}
-
-@media(min-width:600px){
-  body{padding-left:24px;padding-right:24px}
-  .item{padding:16px}
-  .days{justify-content:center}
-}
+@media(min-width:600px){body{padding-left:24px;padding-right:24px}.item{padding:16px}.days{justify-content:center}}
 @media(prefers-color-scheme:dark){
-  :root{--bg:#111216;--card:rgba(29,30,36,.92);--text:#f5f5f7;--muted:#989aa5;--line:#33343c}
-  body{
-    background:
-      radial-gradient(circle at 100% 0%, rgba(139,92,246,.18), transparent 30%),
-      radial-gradient(circle at 0% 18%, rgba(91,92,226,.15), transparent 28%),
-      #111216;
-  }
-  .iconbtn,.actions button,.day{background:rgba(38,39,47,.75);color:#d7d8df}
-  .day.active{background:#f5f5f7;color:#15161a}
-  .day.today:not(.active) b{color:#8d8fff}
-  .card{border-color:rgba(255,255,255,.06)}
-  .gym{background:#292b55;color:#b9baff}
-  .smart{background:#193b2a;color:#78dfab}
-  .private{background:#49361c;color:#ffd28a}
-  .other{background:#2b2c32;color:#b9bac2}
+  :root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.91);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34}
+  body{background:radial-gradient(circle at 100% 0%,rgba(111,143,114,.20),transparent 28%),radial-gradient(circle at 0% 25%,rgba(232,160,110,.10),transparent 27%),#171a16}
+  .iconbtn,.actions button,.quick button,.day{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}
+  .day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}
+  .gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}
+}
+
+/* v10 app shell */
+.view{display:none}.view.active{display:block}
+.bottomnav{
+  position:sticky;bottom:10px;z-index:20;margin:14px auto 0;max-width:520px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;
+  background:rgba(255,252,245,.86);border:1px solid rgba(255,255,255,.9);
+  border-radius:22px;box-shadow:0 14px 34px rgba(75,69,51,.14);backdrop-filter:blur(22px);
+}
+.navbtn{border:0;background:transparent;border-radius:17px;padding:8px 4px 7px;color:#85897f;font-weight:750;font-size:10px}
+.navbtn span{display:block;font-size:20px;line-height:21px;margin-bottom:3px}
+.navbtn.active{background:var(--sage-soft);color:var(--sage-dark)}
+.panel{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:23px;box-shadow:var(--shadow);overflow:hidden}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:17px;border-bottom:1px solid var(--line)}
+.setting:last-child{border-bottom:0}
+.setting b{font-size:15px}.setting small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.toggle{width:48px;height:29px;border:0;border-radius:20px;background:#c9c9bf;position:relative}
+.toggle:after{content:"";position:absolute;width:23px;height:23px;left:3px;top:3px;background:white;border-radius:50%;box-shadow:0 2px 6px #0002;transition:.2s}
+.toggle.on{background:var(--sage)}.toggle.on:after{left:22px}
+.weekgrid{display:grid;gap:10px}
+.weekday{background:var(--card);border-radius:19px;padding:14px;box-shadow:0 8px 24px rgba(75,69,51,.07);border:1px solid rgba(255,255,255,.85)}
+.weekdayhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.weekdayhead b{font-size:17px}.weekdayhead span{font-size:10px;color:var(--muted);font-weight:750}
+.weekitem{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12px}
+.weekitem time{color:var(--muted);font-weight:700;white-space:nowrap}
+@media(prefers-color-scheme:dark){
+ .bottomnav{background:rgba(31,34,28,.9);border-color:#ffffff10}.navbtn{color:#a5aa9e}.navbtn.active{background:#29432e;color:#c9e3cb}
+ .panel,.weekday{border-color:#ffffff08}
 }
 </style>
 </head>
@@ -200,32 +134,95 @@ h1{
 <header><div><h1 id="title">Расписание</h1><div class="sub" id="subtitle"></div></div><button class="iconbtn" id="today" aria-label="Сегодня">⌁</button></header>
 <nav class="days" id="days"></nav>
 <section class="hero" id="hero"></section>
-<div class="actions"><button id="edit">✏️ Заметка</button></div>
+<div class="quick"><button id="addEvent">＋ Добавить</button><button id="edit">✎ Заметка</button></div>
+<div id="todayView" class="view active">
+
 <div id="content"></div>
 </div>
-<script>
-const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"],keys=["mon","tue","wed","thu","fri","sat","sun"];
-const data={
-mon:{school:"Smart School",type:"smart",items:[["","09:00–11:00","Ресепшн"],["4","12:00–12:40","Урок (5/6м, 1 г)"],["5","12:50–13:30","Урок (5/6м, 2 г)"],["6","13:50–14:30","Урок (6с/7, 1 г)"],["7","14:40–15:20","Урок (6с/7, 2 г)"],["","15:30–17:00","Сампо (7 кл)"],["","16:00–17:00","Прогулка"],["","17:00–19:00","Индивидуальные занятия"]]},
-tue:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","16:00","Частное: Полина"],["","17:00","Частное: Соня"],["","18:00","Частное: Максим"]]},
-wed:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","17:00","Частное: Женя"],["","19:00","Частное: Максим"]]},
-thu:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["7","13:40–14:20","Урок"],["","15:00","Частное: Полина"]]},
-fri:{school:"Smart School",type:"smart",items:[["1","09:30–10:10","Урок (5/6м, 1 г)"],["2","10:20–11:00","Урок (5/6м, 2 г)"],["3","11:10–11:50","Урок (6с/7, 1 г)"],["4","12:00–12:40","Урок (6с/7, 2 г)"],["","12:40–16:10","Ресепшн"],["","16:10","Прогулка"],["","17:00–18:00","Индивидуальные занятия"]]},
-sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00","Соня"],["","12:00","Частное: Женя"]]}
-};
-let selected=keys[(new Date().getDay()+6)%7], notes=JSON.parse(localStorage.getItem("pwa-notes")||"{}");
-function mins(s){let m=s.match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
-function nowState(item){let p=item[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]);if(a==null)return 0;let n=new Date().getHours()*60+new Date().getMinutes();return n>=a&&n<b?1:n>=b?2:0}
-function todayKey(){return keys[(new Date().getDay()+6)%7]}
-function renderDays(){days.innerHTML="";keys.forEach((k,i)=>{let b=document.createElement("button");b.className="day "+(k===selected?"active ":"")+(k===todayKey()?"today":"");b.innerHTML=`<b>${names[i]}</b><small>${k===todayKey()?"сегодня":""}</small>`;b.onclick=()=>{selected=k;render()};days.appendChild(b)})}
-function renderHero(d){let cur=d.items.find(x=>nowState(x)===1);if(!cur){hero.innerHTML=`<div class="label">${d.school}</div><h2>${d.items.length?"Расписание на день":"Свободный день"}</h2><div class="time">${d.items.length?"Выбери занятие ниже":"Можно отдыхать 🙂"}</div>`;return}{
-  let p=cur[1].split("–"), a=mins(p[0]), b=mins(p[1]||p[0]), n=new Date().getHours()*60+new Date().getMinutes();
-  let pct=(b>a)?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;
-  hero.innerHTML=`<div class="label">Сейчас · ${d.school}</div><h2>${cur[2]}</h2><div class="time">${cur[1]}${cur[0]?` · урок ${cur[0]}`:""}</div><div class="progress"><i style="width:${pct}%"></i></div>`;
-}}
-function render(){renderDays();let d=data[selected];subtitle.textContent=selected===todayKey()?"Сегодня":names[keys.indexOf(selected)];renderHero(d);let html=`<div class="section">${d.school}</div><div class="card">`;if(!d.items.length)html+=`<div class="empty">На этот день ничего не запланировано</div>`;d.items.forEach(x=>{let st=nowState(x), badge=(x[2].includes("Частное")||x[2].includes("Индивидуальные занятия"))?"private":d.type;html+=`<div class="item ${st===1?"current":""} ${st===2?"done":""}"><div class="time">${x[0]?`УРОК ${x[0]}<br>`:""}${x[1]}</div><div><div class="title">${x[2]}</div>${(x[2].includes("Частное")||x[2].includes("Индивидуальные занятия"))?`<div class="meta">У меня дома</div>`:""}</div><span class="badge ${badge}">${(x[2].includes("Частное")||x[2].includes("Индивидуальные занятия"))?"Частное":d.type==="gym"?"Гимназия":d.type==="smart"?"Smart School":"Дело"}</span></div>`});html+="</div>";if(notes[selected])html+=`<div class="section">Заметка</div><div class="card"><div class="item"><div></div><div class="title">${notes[selected].replace(/</g,"&lt;").replace(/\n/g,"<br>")}</div></div></div>`;content.innerHTML=html}
-today.onclick=()=>{selected=todayKey();render()};edit.onclick=()=>{let v=prompt("Заметка для "+names[keys.indexOf(selected)],notes[selected]||"");if(v!==null){notes[selected]=v.trim();localStorage.setItem("pwa-notes",JSON.stringify(notes));render()}};
 
+</div>
+<div id="weekView" class="view">
+  <div class="section">Вся неделя</div>
+  <div id="weekGrid" class="weekgrid"></div>
+</div>
+<div id="addView" class="view">
+  <div class="section">Новое дело</div>
+  <div class="panel" style="padding:16px">
+    <div class="setting" style="padding:5px 0 15px;border:0;display:block">
+      <b>Добавить в расписание</b>
+      <small>Событие сохранится на этом устройстве.</small>
+    </div>
+    <div class="quick" style="margin:0">
+      <button id="addNow">＋ Добавить дело</button>
+      <button id="addNote">✎ Заметка</button>
+    </div>
+  </div>
+</div>
+<div id="settingsView" class="view">
+  <div class="section">Настройки</div>
+  <div class="panel">
+    <div class="setting"><div><b>Формат времени</b><small>24-часовой формат</small></div><span style="font-weight:800;color:var(--sage-dark)">24 ч</span></div>
+    <div class="setting"><div><b>Обновление</b><small>Расписание обновляется автоматически</small></div><span style="font-size:18px">↻</span></div>
+    <div class="setting"><div><b>Данные</b><small>События и заметки хранятся локально</small></div><span style="font-size:18px">✓</span></div>
+  </div>
+</div>
+<nav class="bottomnav">
+  <button class="navbtn active" data-view="todayView"><span>☀︎</span>Сегодня</button>
+  <button class="navbtn" data-view="weekView"><span>▦</span>Неделя</button>
+  <button class="navbtn" data-view="addView"><span>＋</span>Добавить</button>
+  <button class="navbtn" data-view="settingsView"><span>⚙︎</span>Настройки</button>
+</nav>
+<script>
+const data = window.data || {
+  // Fallback is intentionally empty if the original data object is unavailable.
+};
+window.data=data;
+const keys = window.keys || ["mon","tue","wed","thu","fri","sat","sun"];
+window.keys=keys;
+const names = window.names || ["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"];
+window.names=names;
+let selected = keys[(new Date().getDay()+6)%7];
+let notes=JSON.parse(localStorage.getItem("pwa-notes")||"{}");
+let customEvents=JSON.parse(localStorage.getItem("pwa-events")||"{}");
+
+function mins(s){let m=String(s).match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
+function todayKey(){return keys[(new Date().getDay()+6)%7]}
+function allItems(k){return [...(data[k]?.items||[]),...(customEvents[k]||[]).map(x=>["custom",x.time,x.title])].sort((a,b)=>(mins(a[1])??9999)-(mins(b[1])??9999))}
+function state(x){
+ let p=String(x[1]).split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes();
+ return a!=null&&b!=null?(n>=a&&n<b?1:n>=b?2:0):0
+}
+function renderDays(){
+ const el=document.getElementById("days"); if(!el)return; el.innerHTML="";
+ keys.forEach((k,i)=>{let b=document.createElement("button");b.className="day "+(k===selected?"active ":"")+(k===todayKey()?"today":"");b.innerHTML=`<b>${names[i]}</b><small>${k===todayKey()?"сегодня":(allItems(k).length?allItems(k).length+" дел":"")}</small>`;b.onclick=()=>{selected=k;showView("todayView");render()};el.appendChild(b)})
+}
+function renderHero(d){
+ const hero=document.getElementById("hero");if(!hero)return;let items=allItems(selected),cur=items.find(x=>state(x)===1),next=items.find(x=>state(x)===0);
+ if(cur){let p=cur[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes(),pct=(b>a)?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;hero.className="hero";hero.innerHTML=`<div class="label">Сейчас · ${d?.school||""}</div><h2>${cur[2]}</h2><div class="time">${cur[1]}</div><div class="progress"><i style="width:${pct}%"></i></div>`}
+ else if(next){let a=mins(next[1]),n=new Date().getHours()*60+new Date().getMinutes(),delta=Math.max(0,a-n),when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;hero.className="hero next";hero.innerHTML=`<div class="label">Ближайшее · ${d?.school||""}</div><h2>${next[2]}</h2><div class="time">${next[1]}</div><div class="nextline">${when}</div>`}
+ else{hero.className="hero";hero.innerHTML=`<div class="label">${d?.school||""}</div><h2>${items.length?"Всё на сегодня":"Свободный день"}</h2><div class="time">${items.length?"Все дела уже закончились":"Можно отдыхать ✨"}</div>`}
+}
+function render(){
+ renderDays();
+ let d=data[selected]||{items:[],school:""},items=allItems(selected);
+ document.getElementById("subtitle").textContent=selected===todayKey()?"Сегодня":names[keys.indexOf(selected)];
+ renderHero(d);
+ let out=`<div class="section">${d.school||"Расписание"}</div><div class="card">`;
+ if(!items.length)out+=`<div class="empty">На этот день ничего не запланировано</div>`;
+ items.forEach(x=>{let st=state(x),custom=x[0]==="custom",priv=/Частное|Индивидуальные/.test(x[2]),badge=custom?"custom":priv?"private":d.type||"other",bt=custom?"Добавлено":priv?"Частное":d.type==="gym"?"Гимназия":d.type==="smart"?"Smart School":"Дело";out+=`<div class="item ${st===1?"current":""} ${st===2?"done":""}"><div class="time">${x[0]&&x[0]!=="custom"?`УРОК ${x[0]}<br>`:""}${x[1]}</div><div><div class="title">${x[2]}</div>${priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}</div><span class="badge ${badge}">${bt}</span></div>`});
+ out+="</div>"; if(notes[selected])out+=`<div class="section">Заметка</div><div class="card"><div class="item"><div></div><div class="title">${notes[selected].replace(/</g,"&lt;").replace(/\\n/g,"<br>")}</div></div></div>`;document.getElementById("content").innerHTML=out;
+}
+function renderWeek(){
+ const el=document.getElementById("weekGrid");el.innerHTML="";
+ keys.forEach((k,i)=>{let items=allItems(k),box=document.createElement("div");box.className="weekday";box.innerHTML=`<div class="weekdayhead"><b>${names[i]}${k===todayKey()?" · сегодня":""}</b><span>${items.length?items.length+" дел":"свободно"}</span></div>`+(items.length?items.map(x=>`<div class="weekitem"><b>${x[2]}</b><time>${x[1]}</time></div>`).join(""):`<div style="color:var(--muted);font-size:12px">Нет запланированных дел</div>`);el.appendChild(box)})
+}
+function showView(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===id));if(id==="weekView")renderWeek()}
+document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+document.getElementById("today").onclick=()=>{selected=todayKey();showView("todayView");render()};
+document.getElementById("addEvent").onclick=()=>showView("addView");
+document.getElementById("edit").onclick=()=>{let v=prompt("Заметка для "+names[keys.indexOf(selected)],notes[selected]||"");if(v!==null){if(v.trim())notes[selected]=v.trim();else delete notes[selected];localStorage.setItem("pwa-notes",JSON.stringify(notes));render()}};
+document.getElementById("addNow").onclick=()=>{let title=prompt("Что добавить?");if(!title)return;let time=prompt("Во сколько? Например 18:30 или 18:30–19:30");if(!time||!/\d{1,2}:\d{2}/.test(time))return alert("Укажи время в формате 18:30 или 18:30–19:30.");(customEvents[selected]??=[]).push({title:title.trim(),time:time.trim()});localStorage.setItem("pwa-events",JSON.stringify(customEvents));showView("todayView");render()};
+document.getElementById("addNote").onclick=()=>{showView("todayView");document.getElementById("edit").click()};
 if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js");
 render();setInterval(render,30000);
 </script></body></html>
