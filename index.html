@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 12 -->
+<!-- APP_VERSION: 10 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -99,18 +99,6 @@ h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
   .day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}
   .gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}
 }
-
-/* v12 comfort layer */
-.moodline{font-size:12px;color:var(--muted);margin:2px 0 12px}
-.filterbar{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;scrollbar-width:none}
-.filterbar::-webkit-scrollbar{display:none}
-.filterbar button{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:8px 12px;border-radius:14px;font-size:11px;font-weight:800;white-space:nowrap}
-.filterbar button.active{background:var(--sage-soft);color:var(--sage-dark);border-color:transparent}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
-.stat{background:var(--card);border:1px solid rgba(255,255,255,.85);border-radius:18px;padding:12px 10px;box-shadow:0 7px 20px rgba(75,69,51,.06)}
-.stat b{display:block;font-size:19px;color:var(--sage-dark)}.stat span{font-size:10px;color:var(--muted)}
-.dayhint{padding:13px 15px;border-radius:18px;background:linear-gradient(135deg,var(--sage-soft),rgba(255,224,199,.55));margin-bottom:12px;font-size:12px;font-weight:700}
-@media(prefers-color-scheme:dark){.stat{border-color:#ffffff08}.dayhint{background:#273b2b}}
 </style>
 </head>
 <body><div class="app">
@@ -121,86 +109,6 @@ h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
 <div id="content"></div>
 </div>
 <script>
-
-/* v12 comfort features — schedule data remains untouched. */
-let comfortFilter=localStorage.getItem("comfort-filter")||"all";
-
-function comfortItems(k){
-  const xs=typeof allItems==="function"?allItems(k):[];
-  return xs.filter(x=>{
-    if(comfortFilter==="all") return true;
-    if(comfortFilter==="custom") return x[0]==="custom";
-    if(comfortFilter==="private") return /Частное|Индивидуальные/.test(x[2]);
-    if(comfortFilter==="gym") return (data[k]?.type||"")==="gym";
-    if(comfortFilter==="smart") return (data[k]?.type||"")==="smart";
-    return true;
-  });
-}
-
-function updateComfort(){
-  const k=typeof selected!=="undefined"?selected:todayKey();
-  const xs=comfortItems(k);
-  const all=typeof allItems==="function"?allItems(k):[];
-  const today=todayKey();
-  const label=document.getElementById("dayHint");
-  const mood=document.getElementById("moodLine");
-
-  if(label){
-    if(k===today){
-      const cur=all.find(x=>state(x)===1);
-      const next=all.find(x=>state(x)===0);
-      label.textContent=cur
-        ? `Сейчас — ${cur[2]} 🌿`
-        : next
-          ? `Следующее — ${next[2]} в ${next[1]} ✨`
-          : all.length ? "На сегодня всё. Можно выдохнуть ✨" : "Сегодня свободный день 🌱";
-    } else {
-      label.textContent=all.length
-        ? `${all.length} ${all.length===1?"дело":"дел"} запланировано`
-        : "Спокойный день 🌱";
-    }
-  }
-
-  if(mood){
-    mood.textContent=all.length>5
-      ? "День насыщенный — маленькими шагами 🌿"
-      : all.length ? "Всё по плану. Не спеши." : "Можно немного выдохнуть.";
-  }
-
-  document.querySelectorAll("#filters button").forEach(b=>{
-    b.classList.toggle("active",b.dataset.filter===comfortFilter);
-  });
-
-  const st=document.getElementById("stats");
-  if(st){
-    const week=keys.flatMap(x=>typeof allItems==="function"?allItems(x):[]);
-    const priv=week.filter(x=>/Частное|Индивидуальные/.test(x[2])).length;
-    const free=keys.filter(x=>(typeof allItems==="function"?allItems(x):[]).length===0).length;
-    st.innerHTML=`
-      <div class="stat"><b>${week.length}</b><span>дел за неделю</span></div>
-      <div class="stat"><b>${priv}</b><span>частных</span></div>
-      <div class="stat"><b>${free}</b><span>свободных дней</span></div>`;
-  }
-}
-
-document.addEventListener("click",e=>{
-  const b=e.target.closest("#filters button");
-  if(!b)return;
-  comfortFilter=b.dataset.filter;
-  localStorage.setItem("comfort-filter",comfortFilter);
-  render();
-  updateComfort();
-});
-
-const originalRender=render;
-render=function(){
-  originalRender();
-  updateComfort();
-};
-
-updateComfort();
-
-
 const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"],keys=["mon","tue","wed","thu","fri","sat","sun"];
 const data={
 mon:{school:"Smart School",type:"smart",items:[["","09:00–11:00","Ресепшн"],["4","12:00–12:40","Урок (5/6м, 1 г)"],["5","12:50–13:30","Урок (5/6м, 2 г)"],["6","13:50–14:30","Урок (6с/7, 1 г)"],["7","14:40–15:20","Урок (6с/7, 2 г)"],["","15:30–17:00","Сампо (7 кл)"],["","16:00–17:00","Прогулка"]]},
