@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 10 -->
+<!-- APP_VERSION: 21 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -8,109 +8,41 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Расписание">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Расписание</title>
 <style>
-:root{
-  --bg:#f6f2e9;
-  --bg2:#eee9dd;
-  --card:rgba(255,252,245,.88);
-  --text:#20251f;
-  --muted:#7d8379;
-  --line:#e6e0d4;
-  --sage:#6f8f72;
-  --sage-dark:#3f6248;
-  --sage-soft:#dce9d9;
-  --olive:#9a9a62;
-  --peach:#e8a06e;
-  --peach-soft:#f8dfca;
-  --cream:#fffaf0;
-  --shadow:0 14px 38px rgba(75,69,51,.10);
-}
-*{box-sizing:border-box}
-html{background:var(--bg)}
-body{
-  margin:0;min-height:100vh;color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(111,143,114,.22),transparent 28%),
-    radial-gradient(circle at 0% 25%,rgba(232,160,110,.14),transparent 27%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
-}
-button{font:inherit;-webkit-tap-highlight-color:transparent}
-.app{max-width:760px;margin:auto;padding-bottom:34px}
-header{padding:22px 3px 13px;display:flex;justify-content:space-between;align-items:center}
-h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
-.sub{font-size:14px;color:var(--muted);margin-top:8px;font-weight:600}
-.iconbtn{
-  width:44px;height:44px;border-radius:15px;border:1px solid rgba(255,255,255,.75);
-  background:rgba(255,252,245,.72);color:var(--sage-dark);font-size:22px;
-  box-shadow:0 7px 20px rgba(75,69,51,.09);backdrop-filter:blur(18px)
-}
-.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 15px;scrollbar-width:none}
-.days::-webkit-scrollbar{display:none}
-.day{
-  min-width:54px;border:0;border-radius:17px;background:rgba(255,252,245,.54);
-  padding:9px 8px 8px;color:#81867d;font-weight:750;transition:.2s ease;
-}
-.day b{display:block;font-size:16px;color:inherit}.day small{display:block;font-size:9px;line-height:12px;margin-top:2px;min-height:12px}
-.day.active{background:var(--sage-dark);color:#fff;box-shadow:0 8px 18px rgba(63,98,72,.22);transform:translateY(-1px)}
-.day.today:not(.active) b{color:var(--sage-dark)}
-.day.today:not(.active){box-shadow:inset 0 0 0 1.5px rgba(111,143,114,.28)}
-
-.hero{
-  position:relative;overflow:hidden;background:linear-gradient(135deg,#5e7e63 0%,#789978 52%,#9a9a62 100%);
-  color:#fff;border-radius:29px;padding:21px 20px 19px;margin-bottom:13px;
-  box-shadow:0 17px 36px rgba(74,101,75,.22)
-}
-.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}
-.hero:before{width:175px;height:175px;right:-65px;top:-70px}.hero:after{width:100px;height:100px;right:42px;bottom:-62px}
-.hero>*{position:relative;z-index:1}.hero .label{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.8px;opacity:.78}
-.hero h2{font-size:26px;line-height:1.12;margin:7px 0 5px;letter-spacing:-.55px}.hero .time{font-size:15px;color:rgba(255,255,255,.9);font-weight:600}
-.progress{height:6px;background:rgba(255,255,255,.24);border-radius:10px;margin-top:16px;overflow:hidden}.progress i{display:block;height:100%;background:#fff;border-radius:10px}
-.hero.next{background:linear-gradient(135deg,#a8744e,#c28a5d 55%,#9b9860);box-shadow:0 15px 32px rgba(156,116,75,.18)}
-.hero .nextline{font-size:13px;margin-top:10px;opacity:.9}
-
-.section{font-size:11px;color:#85897f;font-weight:850;text-transform:uppercase;letter-spacing:.75px;margin:18px 5px 8px}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.88);border-radius:23px;overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(16px)}
-.item{display:grid;grid-template-columns:72px 1fr auto;gap:11px;padding:15px 14px;border-bottom:1px solid var(--line);align-items:center;transition:.2s ease}
-.item:last-child{border:0}.item.current{background:linear-gradient(90deg,rgba(111,143,114,.14),rgba(111,143,114,.025));box-shadow:inset 4px 0 var(--sage)}
-.item.done{opacity:.45}
-.time{font-size:10.5px;color:#878b83;font-weight:850;line-height:1.4}.title{font-size:16px;font-weight:730;letter-spacing:-.15px}.meta{font-size:12px;color:#8a8d84;margin-top:4px}
-.badge{font-size:9px;font-weight:850;padding:6px 8px;border-radius:9px;white-space:nowrap}
-.gym{background:#e4e8df;color:#506a54}.smart{background:var(--sage-soft);color:#397047}.private{background:var(--peach-soft);color:#aa663a}.other{background:#ece9df;color:#77786e}
-.custom{background:#ece7ce;color:#79733e}
-.empty{padding:38px 20px;text-align:center;color:var(--muted);font-weight:550}
-.actions{display:flex;gap:8px;margin:11px 0}
-.actions button{
-  flex:1;border:0;background:rgba(255,252,245,.78);border-radius:16px;padding:12px 11px;
-  font-weight:760;color:var(--sage-dark);box-shadow:0 5px 16px rgba(75,69,51,.06);border:1px solid rgba(255,255,255,.8)
-}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:11px 0}
-.quick button{border:0;border-radius:16px;padding:12px;background:rgba(255,252,245,.72);color:var(--text);font-weight:700;box-shadow:0 5px 16px rgba(75,69,51,.06)}
-.quick button:first-child{background:var(--sage-dark);color:#fff}
-.install{display:none}
+:root{--bg:#f6f2e9;--bg2:#eee9dd;--card:rgba(255,252,245,.9);--text:#20251f;--muted:#7d8379;--line:#e6e0d4;--sage:#6f8f72;--sage-dark:#3f6248;--sage-soft:#dce9d9;--olive:#9a9a62;--peach:#e8a06e;--peach-soft:#f8dfca;--cream:#fffaf0;--danger:#b45454;--shadow:0 14px 38px rgba(75,69,51,.10)}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;background:radial-gradient(circle at 100% 0%,rgba(111,143,114,.22),transparent 28%),radial-gradient(circle at 0% 25%,rgba(232,160,110,.14),transparent 27%),linear-gradient(180deg,var(--bg),var(--bg2));padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
+button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:transparent}.app{max-width:760px;margin:auto;padding-bottom:40px}header{padding:20px 3px 12px;display:flex;justify-content:space-between;align-items:center}h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}.sub{font-size:14px;color:var(--muted);margin-top:8px;font-weight:650}.iconbtn{width:44px;height:44px;border-radius:15px;border:1px solid rgba(255,255,255,.75);background:rgba(255,252,245,.72);color:var(--sage-dark);font-size:20px;box-shadow:0 7px 20px rgba(75,69,51,.09);backdrop-filter:blur(18px)}
+.datebar{display:flex;align-items:center;gap:8px;margin-bottom:10px}.datebtn{border:0;background:transparent;color:var(--sage-dark);font-weight:800;padding:7px 5px}.date-title{flex:1;text-align:center;font-weight:800;font-size:16px}.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}.day{min-width:58px;border:0;border-radius:17px;background:rgba(255,252,245,.54);padding:9px 8px 8px;color:#81867d;font-weight:750;transition:.2s ease}.day b{display:block;font-size:16px;color:inherit}.day small{display:block;font-size:9px;line-height:12px;margin-top:2px;min-height:12px}.day.active{background:var(--sage-dark);color:#fff;box-shadow:0 8px 18px rgba(63,98,72,.22);transform:translateY(-1px)}.day.today:not(.active) b{color:var(--sage-dark)}.day.today:not(.active){box-shadow:inset 0 0 0 1.5px rgba(111,143,114,.28)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#5e7e63 0%,#789978 52%,#9a9a62 100%);color:#fff;border-radius:27px;padding:20px;margin-bottom:12px;box-shadow:0 17px 36px rgba(74,101,75,.22)}.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}.hero:before{width:175px;height:175px;right:-65px;top:-70px}.hero:after{width:100px;height:100px;right:42px;bottom:-62px}.hero>*{position:relative;z-index:1}.hero .label{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.8px;opacity:.78}.hero h2{font-size:25px;line-height:1.12;margin:7px 0 5px;letter-spacing:-.55px}.hero .time{font-size:15px;color:rgba(255,255,255,.9);font-weight:600}.hero .location{font-size:12px;margin-top:8px;opacity:.85}.progress{height:6px;background:rgba(255,255,255,.24);border-radius:10px;margin-top:15px;overflow:hidden}.progress i{display:block;height:100%;background:#fff;border-radius:10px}.hero.next{background:linear-gradient(135deg,#a8744e,#c28a5d 55%,#9b9860);box-shadow:0 15px 32px rgba(156,116,75,.18)}.hero .nextline{font-size:13px;margin-top:9px;opacity:.9}
+.quick{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:8px;margin:10px 0}.quick button{border:0;border-radius:16px;padding:12px 9px;background:rgba(255,252,245,.78);color:var(--text);font-weight:760;box-shadow:0 5px 16px rgba(75,69,51,.06)}.quick button:first-child{background:var(--sage-dark);color:#fff}.section{font-size:11px;color:#85897f;font-weight:850;text-transform:uppercase;letter-spacing:.75px;margin:17px 5px 8px}.card{background:var(--card);border:1px solid rgba(255,255,255,.88);border-radius:23px;overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(16px)}.item{display:grid;grid-template-columns:72px 1fr auto;gap:11px;padding:14px;border-bottom:1px solid var(--line);align-items:center}.item:last-child{border:0}.item.current{background:linear-gradient(90deg,rgba(111,143,114,.14),rgba(111,143,114,.025));box-shadow:inset 4px 0 var(--sage)}.item.done{opacity:.45}.item.cancelled{opacity:.45;text-decoration:line-through}.time{font-size:10.5px;color:#878b83;font-weight:850;line-height:1.4}.title{font-size:16px;font-weight:730;letter-spacing:-.15px}.meta{font-size:12px;color:#8a8d84;margin-top:4px}.badge{font-size:9px;font-weight:850;padding:6px 8px;border-radius:9px;white-space:nowrap}.gym{background:#e4e8df;color:#506a54}.smart{background:var(--sage-soft);color:#397047}.private{background:var(--peach-soft);color:#aa663a}.other{background:#ece9df;color:#77786e}.custom{background:#ece7ce;color:#79733e}.empty{padding:38px 20px;text-align:center;color:var(--muted);font-weight:550}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stat{padding:12px 10px;background:rgba(255,252,245,.65);border-radius:15px;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:var(--muted);font-weight:700}.note{padding:15px;font-size:14px;line-height:1.5}.note-actions{display:flex;gap:8px;margin-top:10px}.note-actions button{border:0;background:rgba(255,255,255,.6);border-radius:12px;padding:8px 10px;color:var(--sage-dark);font-weight:750}.event-actions{display:flex;gap:7px;margin-top:8px}.event-actions button{border:0;background:rgba(255,255,255,.6);border-radius:10px;padding:6px 9px;color:var(--sage-dark);font-size:11px;font-weight:800}.install{display:none}
+.sheet-backdrop{position:fixed;inset:0;background:rgba(20,25,20,.34);backdrop-filter:blur(5px);z-index:20;opacity:0;pointer-events:none;transition:.2s}.sheet-backdrop.open{opacity:1;pointer-events:auto}.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:27px 27px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;transform:translateY(100%);transition:.25s}.sheet-backdrop.open .sheet{transform:translateY(0)}.grab{width:42px;height:5px;background:#cfc9bd;border-radius:8px;margin:2px auto 15px}.sheet h2{margin:0 0 14px;font-size:23px}.field{margin:10px 0}.field label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;margin:0 0 6px 3px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:14px;padding:12px 13px;outline:none;color:var(--text)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.sheet-buttons button{border:0;border-radius:15px;padding:13px;font-weight:800}.cancel{background:#e9e5dc;color:#65685f}.save{background:var(--sage-dark);color:#fff}.danger{background:#f2dddd;color:var(--danger)}
 @media(min-width:600px){body{padding-left:24px;padding-right:24px}.item{padding:16px}.days{justify-content:center}}
-@media(prefers-color-scheme:dark){
-  :root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.91);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34}
-  body{background:radial-gradient(circle at 100% 0%,rgba(111,143,114,.20),transparent 28%),radial-gradient(circle at 0% 25%,rgba(232,160,110,.10),transparent 27%),#171a16}
-  .iconbtn,.actions button,.quick button,.day{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}
-  .day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}
-  .gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}
-}
+@media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
 </style>
 </head>
-<body><div class="app">
-<header><div><h1 id="title">Расписание</h1><div class="sub" id="subtitle"></div></div><button class="iconbtn" id="today" aria-label="Сегодня">⌁</button></header>
+<body>
+<div class="app">
+<header><div><h1>Расписание</h1><div class="sub" id="subtitle"></div></div><button class="iconbtn" id="today" aria-label="Сегодня">⌁</button></header>
+<div class="datebar"><button class="datebtn" id="prevDay">‹</button><div class="date-title" id="dateTitle"></div><button class="datebtn" id="nextDay">›</button></div>
 <nav class="days" id="days"></nav>
 <section class="hero" id="hero"></section>
-<div class="quick"><button id="addEvent">＋ Добавить</button><button id="edit">✎ Заметка</button></div>
+<div class="quick"><button id="addEvent">＋ Добавить</button><button id="editNote">✎ Заметка</button><button id="manage">⚙ Ещё</button></div>
 <div id="content"></div>
 </div>
+<div class="sheet-backdrop" id="backdrop"><div class="sheet" id="sheet"><div class="grab"></div><h2 id="sheetTitle">Новое событие</h2><form id="eventForm">
+<div class="field"><label>Название</label><input id="fTitle" required placeholder="Например: Врач, магазин, встреча"></div>
+<div class="row"><div class="field"><label>Начало</label><input id="fStart" type="time" required></div><div class="field"><label>Конец</label><input id="fEnd" type="time"></div></div>
+<div class="field"><label>Место</label><input id="fLocation" placeholder="Например: дома, Smart School"></div>
+<div class="field"><label>Тип</label><select id="fCategory"><option value="custom">Личное</option><option value="private">Частное</option><option value="work">Работа</option><option value="other">Другое</option></select></div>
+<div class="sheet-buttons"><button type="button" class="cancel" id="closeSheet">Отмена</button><button class="save" type="submit">Сохранить</button></div>
+</form></div></div>
 <script>
-const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"],keys=["mon","tue","wed","thu","fri","sat","sun"];
-const data={
+const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"], keys=["mon","tue","wed","thu","fri","sat","sun"];
+// БАЗОВОЕ РАСПИСАНИЕ: это исходные данные приложения. Не удалять и не перезаписывать при миграции.
+const BASE_SCHEDULE={
 mon:{school:"Smart School",type:"smart",items:[["","09:00–11:00","Ресепшн"],["4","12:00–12:40","Урок (5/6м, 1 г)"],["5","12:50–13:30","Урок (5/6м, 2 г)"],["6","13:50–14:30","Урок (6с/7, 1 г)"],["7","14:40–15:20","Урок (6с/7, 2 г)"],["","15:30–17:00","Сампо (7 кл)"],["","16:00–17:00","Прогулка"]]},
 tue:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","16:00","Частное: Полина"],["","17:00","Частное: Соня"],["","18:00","Частное: Максим"]]},
 wed:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","17:00","Частное: Женя"],["","19:00","Частное: Максим"]]},
@@ -118,87 +50,74 @@ thu:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30�
 fri:{school:"Smart School",type:"smart",items:[["1","09:30–10:10","Урок (5/6м, 1 г)"],["2","10:20–11:00","Урок (5/6м, 2 г)"],["3","11:10–11:50","Урок (6с/7, 1 г)"],["4","12:00–12:40","Урок (6с/7, 2 г)"],["","12:40–16:10","Ресепшн"],["","16:10","Прогулка"]]},
 sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00","Соня"],["","12:00","Частное: Женя"]]}
 };
-let selected=keys[(new Date().getDay()+6)%7],
-notes=JSON.parse(localStorage.getItem("pwa-notes")||"{}"),
-customEvents=JSON.parse(localStorage.getItem("pwa-events")||"{}");
-
-function mins(s){let m=s.match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
-function nowState(item){
-  let p=item[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]);
-  if(a==null)return 0;
-  let n=new Date().getHours()*60+new Date().getMinutes();
-  return n>=a&&n<b?1:n>=b?2:0
-}
-function todayKey(){return keys[(new Date().getDay()+6)%7]}
-function allItems(k){return [...data[k].items,...(customEvents[k]||[]).map(x=>["custom",x.time,x.title])].sort((a,b)=>(mins(a[1])??9999)-(mins(b[1])??9999))}
-function isPrivate(x){return /Частное|Индивидуальные занятия/.test(x[2])}
-function renderDays(){
-  days.innerHTML="";
-  keys.forEach((k,i)=>{
-    let b=document.createElement("button");
-    let count=allItems(k).length;
-    b.className="day "+(k===selected?"active ":"")+(k===todayKey()?"today":"");
-    b.innerHTML=`<b>${names[i]}</b><small>${k===todayKey()?"сегодня":count?count+" дел":""}</small>`;
-    b.onclick=()=>{selected=k;render()};
-    days.appendChild(b)
-  })
-}
-function renderHero(d){
-  let items=allItems(selected),cur=items.find(x=>nowState(x)===1);
-  if(cur){
-    let p=cur[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes();
-    let pct=(b>a)?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;
-    hero.className="hero";
-    hero.innerHTML=`<div class="label">Сейчас · ${d.school}</div><h2>${cur[2]}</h2><div class="time">${cur[1]}${cur[0]&&cur[0]!=="custom"?` · урок ${cur[0]}`:""}</div><div class="progress"><i style="width:${pct}%"></i></div>`;
-    return
+const STORE={events:"pwa-events-v2",notes:"pwa-notes-v2",overrides:"pwa-overrides-v2",legacyEvents:"pwa-events",legacyNotes:"pwa-notes"};
+let events=read(STORE.events,{}), notes=read(STORE.notes,{}), overrides=read(STORE.overrides,{}), editingId=null;
+let selectedDate=new Date(); selectedDate.setHours(12,0,0,0);
+function read(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}
+function save(){localStorage.setItem(STORE.events,JSON.stringify(events));localStorage.setItem(STORE.notes,JSON.stringify(notes));localStorage.setItem(STORE.overrides,JSON.stringify(overrides))}
+function pad(n){return String(n).padStart(2,"0")}
+function iso(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function dateFromIso(s){let [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d,12)}
+function weekdayKey(d){return keys[(d.getDay()+6)%7]}
+function dateLabel(d){return d.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"})}
+function shortDate(d){return d.toLocaleDateString("ru-RU",{day:"numeric",month:"short"}).replace(" г.","")}
+function mins(s){let m=String(s||"").match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
+function nowMins(){let d=new Date();return d.getHours()*60+d.getMinutes()}
+function statusFor(time,d){let p=String(time).split("–"),a=mins(p[0]),b=mins(p[1]||p[0]);if(a==null||iso(d)!==iso(new Date()))return 0;let n=nowMins();return p.length===1?(n>=a?2:0):(n>=b?2:n>=a?1:0)}
+function migrateLegacy(){
+  // Старые события сохраняются как повторяющиеся по соответствующему дню недели — ничего не пропадает.
+  const old=read(STORE.legacyEvents,null), oldNotes=read(STORE.legacyNotes,null);
+  if(old && !localStorage.getItem("pwa-legacy-migrated-v2")){
+    Object.entries(old).forEach(([k,list])=>{if(!Array.isArray(list))return; events.__weekly=events.__weekly||{}; events.__weekly[k]=[...(events.__weekly[k]||[]),...list.map(x=>({id:crypto.randomUUID?.()||String(Date.now()+Math.random()),title:x.title,time:x.time,location:"",category:"custom",legacy:true}))]});
   }
-  let next=items.find(x=>nowState(x)===0);
-  hero.className="hero next";
-  if(next){
-    let a=mins(next[1]),n=new Date().getHours()*60+new Date().getMinutes(),delta=Math.max(0,a-n);
-    let when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;
-    hero.innerHTML=`<div class="label">Ближайшее · ${d.school}</div><h2>${next[2]}</h2><div class="time">${next[1]}${next[0]&&next[0]!=="custom"?` · урок ${next[0]}`:""}</div><div class="nextline">${when}</div>`;
-  }else{
-    hero.className="hero";
-    hero.innerHTML=`<div class="label">${d.school}</div><h2>${items.length?"Всё на сегодня":"Свободный день"}</h2><div class="time">${items.length?"Все дела уже закончились":"Можно отдыхать ✨"}</div>`;
+  if(oldNotes && !localStorage.getItem("pwa-legacy-migrated-v2")){
+    notes.__weekly=oldNotes;
   }
+  localStorage.setItem("pwa-legacy-migrated-v2","1");save();
 }
-function render(){
-  renderDays();
-  let d=data[selected],items=allItems(selected);
-  subtitle.textContent=selected===todayKey()?"Сегодня":names[keys.indexOf(selected)];
-  renderHero(d);
-  let html=`<div class="section">${d.school}</div><div class="card">`;
-  if(!items.length)html+=`<div class="empty">На этот день ничего не запланировано</div>`;
-  items.forEach(x=>{
-    let st=nowState(x), priv=isPrivate(x), custom=x[0]==="custom";
-    let badge=custom?"custom":priv?"private":d.type;
-    let badgeText=custom?"Добавлено":priv?"Частное":d.type==="gym"?"Гимназия":d.type==="smart"?"Smart School":"Дело";
-    html+=`<div class="item ${st===1?"current":""} ${st===2?"done":""}">
-      <div class="time">${x[0]&&x[0]!=="custom"?`УРОК ${x[0]}<br>`:""}${x[1]}</div>
-      <div><div class="title">${x[2]}</div>${priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}</div>
-      <span class="badge ${badge}">${badgeText}</span>
-    </div>`
+migrateLegacy();
+function dateEvents(d){return Array.isArray(events[iso(d)])?events[iso(d)]:[]}
+function weeklyCustom(d){return events.__weekly?.[weekdayKey(d)]||[]}
+function dayItems(d){
+ const base=BASE_SCHEDULE[weekdayKey(d)].items.map((x,i)=>({id:`base-${weekdayKey(d)}-${i}`,base:true,lesson:x[0],time:x[1],title:x[2],category:BASE_SCHEDULE[weekdayKey(d)].type,location:/Частное/.test(x[2])?"У меня дома":""}));
+ const extra=[...weeklyCustom(d),...dateEvents(d)].map(x=>({...x,base:false}));
+ return [...base,...extra].filter(x=>!overrides[iso(d)]?.cancelled?.includes(x.id)).sort((a,b)=>(mins(a.time)??9999)-(mins(b.time)??9999));
+}
+function isPrivate(x){return /Частное|Индивидуальные занятия/.test(x.title)}
+function typeLabel(x){if(x.base)return BASE_SCHEDULE[weekdayKey(selectedDate)].type==="gym"?"Гимназия":BASE_SCHEDULE[weekdayKey(selectedDate)].type==="smart"?"Smart School":"Дело";return x.category==="private"?"Частное":x.category==="work"?"Работа":x.category==="other"?"Другое":"Моё"}
+function renderDays(){days.innerHTML="";let base=new Date(selectedDate);base.setDate(base.getDate()-3);for(let i=0;i<7;i++){let d=new Date(base);d.setDate(base.getDate()+i);let b=document.createElement("button"),k=weekdayKey(d),items=dayItems(d),today=iso(d)===iso(new Date());b.className=`day ${iso(d)===iso(selectedDate)?"active ":""}${today?"today":""}`;b.innerHTML=`<b>${names[keys.indexOf(k)]}</b><small>${today?"сегодня":items.length?items.length+" дел":shortDate(d)}</small>`;b.onclick=()=>{selectedDate=d;render()};days.appendChild(b)}}
+function renderHero(d){let items=dayItems(d),cur=items.find(x=>statusFor(x.time,d)===1),next=items.find(x=>statusFor(x.time,d)===0);if(cur){let p=cur.time.split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=nowMins(),pct=b>a?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;hero.className="hero";hero.innerHTML=`<div class="label">Сейчас · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(cur.title)}</h2><div class="time">${esc(cur.time)}${cur.lesson?` · урок ${esc(cur.lesson)}`:""}</div>${cur.location?`<div class="location">📍 ${esc(cur.location)}</div>`:""}<div class="progress"><i style="width:${pct}%"></i></div>`;return}hero.className="hero next";if(next&&iso(d)===iso(new Date())){let delta=Math.max(0,(mins(next.time)-nowMins()));let when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;hero.innerHTML=`<div class="label">Ближайшее · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(next.title)}</h2><div class="time">${esc(next.time)}${next.lesson?` · урок ${esc(next.lesson)}`:""}</div>${next.location?`<div class="location">📍 ${esc(next.location)}</div>`:""}<div class="nextline">${when}</div>`}else if(next){hero.innerHTML=`<div class="label">План на ${names[keys.indexOf(weekdayKey(d))]} · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(next.title)}</h2><div class="time">${esc(next.time)}</div>${next.location?`<div class="location">📍 ${esc(next.location)}</div>`:""}`}else{hero.className="hero";hero.innerHTML=`<div class="label">${esc(BASE_SCHEDULE[weekdayKey(d)].school)}</div><h2>${items.length?"Всё на этот день":"Свободный день"}</h2><div class="time">${items.length?"Все запланированные дела закончились":"Можно отдыхать ✨"}</div>`}}
+function render(){let d=selectedDate,items=dayItems(d);dateTitle.textContent=dateLabel(d);subtitle.textContent=iso(d)===iso(new Date())?"Сегодня":names[keys.indexOf(weekdayKey(d))];renderDays();renderHero(d);let html=`<div class="section">${esc(BASE_SCHEDULE[weekdayKey(d)].school)}</div><div class="card">`;if(!items.length)html+=`<div class="empty">На этот день ничего не запланировано</div>`;items.forEach(x=>{let st=statusFor(x.time,d),priv=isPrivate(x),custom=!x.base,cls=st===1?"current":st===2?"done":"";html+=`<div class="item ${cls}"><div class="time">${x.lesson?`УРОК ${esc(x.lesson)}<br>`:""}${esc(x.time)}</div><div><div class="title">${esc(x.title)}</div>${x.location?`<div class="meta">📍 ${esc(x.location)}</div>`:priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}${custom?`<div class="event-actions"><button data-edit="${esc(x.id)}">Изменить</button><button data-delete="${esc(x.id)}">Удалить</button></div>`:""}</div><span class="badge ${custom?(x.category||"custom"):priv?"private":x.category}">${typeLabel(x)}</span></div>`});html+=`</div>`;let total=items.length,done=items.filter(x=>statusFor(x.time,d)===2).length;if(total)html+=`<div class="summary"><div class="stat"><b>${total}</b><span>событий</span></div><div class="stat"><b>${done}</b><span>завершено</span></div><div class="stat"><b>${total-done}</b><span>осталось</span></div></div>`;if(notes[iso(d)]||notes.__weekly?.[weekdayKey(d)])html+=`<div class="section">Заметка</div><div class="card"><div class="note">${esc(notes[iso(d)]||notes.__weekly[weekdayKey(d)])}<div class="note-actions"><button id="editNote2">Изменить</button><button id="deleteNote">Удалить</button></div></div></div>`;content.innerHTML=html;content.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));content.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteEvent(b.dataset.delete));document.getElementById("editNote2")?.addEventListener("click",editNote);document.getElementById("deleteNote")?.addEventListener("click",deleteNote)}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function openSheet(item=null){editingId=item?.id||null;sheetTitle.textContent=item?"Изменить событие":"Новое событие";fTitle.value=item?.title||"";let [a,b]=String(item?.time||"").split("–");fStart.value=a||"";fEnd.value=b||"";fLocation.value=item?.location||"";fCategory.value=item?.category||"custom";backdrop.classList.add("open");setTimeout(()=>fTitle.focus(),100)}
+function closeSheet(){backdrop.classList.remove("open");editingId=null}
+function findCustom(id){return [...dateEvents(selectedDate),...weeklyCustom(selectedDate)].find(x=>x.id===id)}
+function openEdit(id){let item=findCustom(id);if(item)openSheet(item)}
+function deleteEvent(id){if(!confirm("Удалить это событие?"))return;let k=iso(selectedDate);if(events[k])events[k]=events[k].filter(x=>x.id!==id);if(events.__weekly)for(let key of keys)events.__weekly[key]=(events.__weekly[key]||[]).filter(x=>x.id!==id);save();render()}
+function editNote(){let old=notes[iso(selectedDate)]||notes.__weekly?.[weekdayKey(selectedDate)]||"";let v=prompt("Заметка на "+dateLabel(selectedDate),old);if(v===null)return;if(v.trim())notes[iso(selectedDate)]=v.trim();else delete notes[iso(selectedDate)];save();render()}
+function deleteNote(){delete notes[iso(selectedDate)];save();render()}
+addEvent.onclick=()=>openSheet();editNote.onclick=editNote;today.onclick=()=>{selectedDate=new Date();selectedDate.setHours(12,0,0,0);render()};prevDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()-1);render()};nextDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()+1);render()};closeSheet.onclick=closeSheet;backdrop.addEventListener("click",e=>{if(e.target===backdrop)closeSheet()});eventForm.onsubmit=e=>{e.preventDefault();let title=fTitle.value.trim(),start=fStart.value,end=fEnd.value;if(!title||!start)return;let obj={id:editingId||crypto.randomUUID?.()||String(Date.now()),title,time:end?`${start}–${end}`:start,location:fLocation.value.trim(),category:fCategory.value};let k=iso(selectedDate);events[k]=events[k]||[];if(editingId){events[k]=events[k].map(x=>x.id===editingId?obj:x)}else events[k].push(obj);save();closeSheet();render()};manage.onclick=()=>alert("База расписания встроена в приложение и не изменяется при добавлении событий. Новые события и заметки хранятся отдельно на этом iPhone. Для переноса данных между устройствами позже можно добавить экспорт/импорт.");
+let touchX=null;document.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].clientX},{passive:true});document.addEventListener("touchend",e=>{if(touchX==null)return;let dx=e.changedTouches[0].clientX-touchX;touchX=null;if(Math.abs(dx)>70){selectedDate.setDate(selectedDate.getDate()+(dx<0?1:-1));render()}} ,{passive:true});
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js",{scope:"./",updateViaCache:"none"}).then(reg=>{
+    reg.update().catch(()=>{});
+    reg.addEventListener("updatefound",()=>{
+      const worker=reg.installing;
+      if(!worker)return;
+      worker.addEventListener("statechange",()=>{
+        if(worker.state==="installed" && navigator.serviceWorker.controller){
+          worker.postMessage({type:"SKIP_WAITING"});
+        }
+      });
+    });
+  }).catch(()=>{});
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    if(reloaded)return;
+    reloaded=true;
+    location.reload();
   });
-  html+="</div>";
-  if(notes[selected])html+=`<div class="section">Заметка</div><div class="card"><div class="item"><div></div><div class="title">${notes[selected].replace(/</g,"&lt;").replace(/\n/g,"<br>")}</div></div></div>`;
-  content.innerHTML=html
 }
-today.onclick=()=>{selected=todayKey();render()};
-edit.onclick=()=>{
-  let v=prompt("Заметка для "+names[keys.indexOf(selected)],notes[selected]||"");
-  if(v!==null){if(v.trim())notes[selected]=v.trim();else delete notes[selected];localStorage.setItem("pwa-notes",JSON.stringify(notes));render()}
-};
-addEvent.onclick=()=>{
-  let title=prompt("Что добавить? Например: Врач, магазин, встреча");
-  if(!title||!title.trim())return;
-  let time=prompt("Во сколько? Например: 18:30 или 18:30–19:30");
-  if(!time||!/\d{1,2}:\d{2}/.test(time))return alert("Укажи время в формате 18:30 или 18:30–19:30.");
-  if(!customEvents[selected])customEvents[selected]=[];
-  customEvents[selected].push({title:title.trim(),time:time.trim()});
-  localStorage.setItem("pwa-events",JSON.stringify(customEvents));
-  render()
-};
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js");
-render();setInterval(render,30000);
-</script></body></html>
+render();setInterval(()=>{renderHero(selectedDate);if(document.visibilityState==="visible")renderDays()},30000);
+</script>
+</body></html>
