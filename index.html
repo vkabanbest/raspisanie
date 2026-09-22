@@ -4,11 +4,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#718A5A">
+<meta name="theme-color" content="#6f8f72">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Расписание">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Расписание</title>
 <style>
 :root{
@@ -99,35 +99,6 @@ h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
   .day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}
   .gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}
 }
-
-/* v10 app shell */
-.view{display:none}.view.active{display:block}
-.bottomnav{
-  position:sticky;bottom:10px;z-index:20;margin:14px auto 0;max-width:520px;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;
-  background:rgba(255,252,245,.86);border:1px solid rgba(255,255,255,.9);
-  border-radius:22px;box-shadow:0 14px 34px rgba(75,69,51,.14);backdrop-filter:blur(22px);
-}
-.navbtn{border:0;background:transparent;border-radius:17px;padding:8px 4px 7px;color:#85897f;font-weight:750;font-size:10px}
-.navbtn span{display:block;font-size:20px;line-height:21px;margin-bottom:3px}
-.navbtn.active{background:var(--sage-soft);color:var(--sage-dark)}
-.panel{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:23px;box-shadow:var(--shadow);overflow:hidden}
-.setting{display:flex;justify-content:space-between;align-items:center;padding:17px;border-bottom:1px solid var(--line)}
-.setting:last-child{border-bottom:0}
-.setting b{font-size:15px}.setting small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
-.toggle{width:48px;height:29px;border:0;border-radius:20px;background:#c9c9bf;position:relative}
-.toggle:after{content:"";position:absolute;width:23px;height:23px;left:3px;top:3px;background:white;border-radius:50%;box-shadow:0 2px 6px #0002;transition:.2s}
-.toggle.on{background:var(--sage)}.toggle.on:after{left:22px}
-.weekgrid{display:grid;gap:10px}
-.weekday{background:var(--card);border-radius:19px;padding:14px;box-shadow:0 8px 24px rgba(75,69,51,.07);border:1px solid rgba(255,255,255,.85)}
-.weekdayhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.weekdayhead b{font-size:17px}.weekdayhead span{font-size:10px;color:var(--muted);font-weight:750}
-.weekitem{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12px}
-.weekitem time{color:var(--muted);font-weight:700;white-space:nowrap}
-@media(prefers-color-scheme:dark){
- .bottomnav{background:rgba(31,34,28,.9);border-color:#ffffff10}.navbtn{color:#a5aa9e}.navbtn.active{background:#29432e;color:#c9e3cb}
- .panel,.weekday{border-color:#ffffff08}
-}
 </style>
 </head>
 <body><div class="app">
@@ -135,94 +106,99 @@ h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}
 <nav class="days" id="days"></nav>
 <section class="hero" id="hero"></section>
 <div class="quick"><button id="addEvent">＋ Добавить</button><button id="edit">✎ Заметка</button></div>
-<div id="todayView" class="view active">
-
 <div id="content"></div>
 </div>
-
-</div>
-<div id="weekView" class="view">
-  <div class="section">Вся неделя</div>
-  <div id="weekGrid" class="weekgrid"></div>
-</div>
-<div id="addView" class="view">
-  <div class="section">Новое дело</div>
-  <div class="panel" style="padding:16px">
-    <div class="setting" style="padding:5px 0 15px;border:0;display:block">
-      <b>Добавить в расписание</b>
-      <small>Событие сохранится на этом устройстве.</small>
-    </div>
-    <div class="quick" style="margin:0">
-      <button id="addNow">＋ Добавить дело</button>
-      <button id="addNote">✎ Заметка</button>
-    </div>
-  </div>
-</div>
-<div id="settingsView" class="view">
-  <div class="section">Настройки</div>
-  <div class="panel">
-    <div class="setting"><div><b>Формат времени</b><small>24-часовой формат</small></div><span style="font-weight:800;color:var(--sage-dark)">24 ч</span></div>
-    <div class="setting"><div><b>Обновление</b><small>Расписание обновляется автоматически</small></div><span style="font-size:18px">↻</span></div>
-    <div class="setting"><div><b>Данные</b><small>События и заметки хранятся локально</small></div><span style="font-size:18px">✓</span></div>
-  </div>
-</div>
-<nav class="bottomnav">
-  <button class="navbtn active" data-view="todayView"><span>☀︎</span>Сегодня</button>
-  <button class="navbtn" data-view="weekView"><span>▦</span>Неделя</button>
-  <button class="navbtn" data-view="addView"><span>＋</span>Добавить</button>
-  <button class="navbtn" data-view="settingsView"><span>⚙︎</span>Настройки</button>
-</nav>
 <script>
-const data = window.data || {
-  // Fallback is intentionally empty if the original data object is unavailable.
+const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"],keys=["mon","tue","wed","thu","fri","sat","sun"];
+const data={
+mon:{school:"Smart School",type:"smart",items:[["","09:00–11:00","Ресепшн"],["4","12:00–12:40","Урок (5/6м, 1 г)"],["5","12:50–13:30","Урок (5/6м, 2 г)"],["6","13:50–14:30","Урок (6с/7, 1 г)"],["7","14:40–15:20","Урок (6с/7, 2 г)"],["","15:30–17:00","Сампо (7 кл)"],["","16:00–17:00","Прогулка"]]},
+tue:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","16:00","Частное: Полина"],["","17:00","Частное: Соня"],["","18:00","Частное: Максим"]]},
+wed:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","17:00","Частное: Женя"],["","19:00","Частное: Максим"]]},
+thu:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["7","13:40–14:20","Урок"],["","15:00","Частное: Полина"]]},
+fri:{school:"Smart School",type:"smart",items:[["1","09:30–10:10","Урок (5/6м, 1 г)"],["2","10:20–11:00","Урок (5/6м, 2 г)"],["3","11:10–11:50","Урок (6с/7, 1 г)"],["4","12:00–12:40","Урок (6с/7, 2 г)"],["","12:40–16:10","Ресепшн"],["","16:10","Прогулка"]]},
+sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00","Соня"],["","12:00","Частное: Женя"]]}
 };
-window.data=data;
-const keys = window.keys || ["mon","tue","wed","thu","fri","sat","sun"];
-window.keys=keys;
-const names = window.names || ["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"];
-window.names=names;
-let selected = keys[(new Date().getDay()+6)%7];
-let notes=JSON.parse(localStorage.getItem("pwa-notes")||"{}");
-let customEvents=JSON.parse(localStorage.getItem("pwa-events")||"{}");
+let selected=keys[(new Date().getDay()+6)%7],
+notes=JSON.parse(localStorage.getItem("pwa-notes")||"{}"),
+customEvents=JSON.parse(localStorage.getItem("pwa-events")||"{}");
 
-function mins(s){let m=String(s).match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
-function todayKey(){return keys[(new Date().getDay()+6)%7]}
-function allItems(k){return [...(data[k]?.items||[]),...(customEvents[k]||[]).map(x=>["custom",x.time,x.title])].sort((a,b)=>(mins(a[1])??9999)-(mins(b[1])??9999))}
-function state(x){
- let p=String(x[1]).split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes();
- return a!=null&&b!=null?(n>=a&&n<b?1:n>=b?2:0):0
+function mins(s){let m=s.match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null}
+function nowState(item){
+  let p=item[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]);
+  if(a==null)return 0;
+  let n=new Date().getHours()*60+new Date().getMinutes();
+  return n>=a&&n<b?1:n>=b?2:0
 }
+function todayKey(){return keys[(new Date().getDay()+6)%7]}
+function allItems(k){return [...data[k].items,...(customEvents[k]||[]).map(x=>["custom",x.time,x.title])].sort((a,b)=>(mins(a[1])??9999)-(mins(b[1])??9999))}
+function isPrivate(x){return /Частное|Индивидуальные занятия/.test(x[2])}
 function renderDays(){
- const el=document.getElementById("days"); if(!el)return; el.innerHTML="";
- keys.forEach((k,i)=>{let b=document.createElement("button");b.className="day "+(k===selected?"active ":"")+(k===todayKey()?"today":"");b.innerHTML=`<b>${names[i]}</b><small>${k===todayKey()?"сегодня":(allItems(k).length?allItems(k).length+" дел":"")}</small>`;b.onclick=()=>{selected=k;showView("todayView");render()};el.appendChild(b)})
+  days.innerHTML="";
+  keys.forEach((k,i)=>{
+    let b=document.createElement("button");
+    let count=allItems(k).length;
+    b.className="day "+(k===selected?"active ":"")+(k===todayKey()?"today":"");
+    b.innerHTML=`<b>${names[i]}</b><small>${k===todayKey()?"сегодня":count?count+" дел":""}</small>`;
+    b.onclick=()=>{selected=k;render()};
+    days.appendChild(b)
+  })
 }
 function renderHero(d){
- const hero=document.getElementById("hero");if(!hero)return;let items=allItems(selected),cur=items.find(x=>state(x)===1),next=items.find(x=>state(x)===0);
- if(cur){let p=cur[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes(),pct=(b>a)?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;hero.className="hero";hero.innerHTML=`<div class="label">Сейчас · ${d?.school||""}</div><h2>${cur[2]}</h2><div class="time">${cur[1]}</div><div class="progress"><i style="width:${pct}%"></i></div>`}
- else if(next){let a=mins(next[1]),n=new Date().getHours()*60+new Date().getMinutes(),delta=Math.max(0,a-n),when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;hero.className="hero next";hero.innerHTML=`<div class="label">Ближайшее · ${d?.school||""}</div><h2>${next[2]}</h2><div class="time">${next[1]}</div><div class="nextline">${when}</div>`}
- else{hero.className="hero";hero.innerHTML=`<div class="label">${d?.school||""}</div><h2>${items.length?"Всё на сегодня":"Свободный день"}</h2><div class="time">${items.length?"Все дела уже закончились":"Можно отдыхать ✨"}</div>`}
+  let items=allItems(selected),cur=items.find(x=>nowState(x)===1);
+  if(cur){
+    let p=cur[1].split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=new Date().getHours()*60+new Date().getMinutes();
+    let pct=(b>a)?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;
+    hero.className="hero";
+    hero.innerHTML=`<div class="label">Сейчас · ${d.school}</div><h2>${cur[2]}</h2><div class="time">${cur[1]}${cur[0]&&cur[0]!=="custom"?` · урок ${cur[0]}`:""}</div><div class="progress"><i style="width:${pct}%"></i></div>`;
+    return
+  }
+  let next=items.find(x=>nowState(x)===0);
+  hero.className="hero next";
+  if(next){
+    let a=mins(next[1]),n=new Date().getHours()*60+new Date().getMinutes(),delta=Math.max(0,a-n);
+    let when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;
+    hero.innerHTML=`<div class="label">Ближайшее · ${d.school}</div><h2>${next[2]}</h2><div class="time">${next[1]}${next[0]&&next[0]!=="custom"?` · урок ${next[0]}`:""}</div><div class="nextline">${when}</div>`;
+  }else{
+    hero.className="hero";
+    hero.innerHTML=`<div class="label">${d.school}</div><h2>${items.length?"Всё на сегодня":"Свободный день"}</h2><div class="time">${items.length?"Все дела уже закончились":"Можно отдыхать ✨"}</div>`;
+  }
 }
 function render(){
- renderDays();
- let d=data[selected]||{items:[],school:""},items=allItems(selected);
- document.getElementById("subtitle").textContent=selected===todayKey()?"Сегодня":names[keys.indexOf(selected)];
- renderHero(d);
- let out=`<div class="section">${d.school||"Расписание"}</div><div class="card">`;
- if(!items.length)out+=`<div class="empty">На этот день ничего не запланировано</div>`;
- items.forEach(x=>{let st=state(x),custom=x[0]==="custom",priv=/Частное|Индивидуальные/.test(x[2]),badge=custom?"custom":priv?"private":d.type||"other",bt=custom?"Добавлено":priv?"Частное":d.type==="gym"?"Гимназия":d.type==="smart"?"Smart School":"Дело";out+=`<div class="item ${st===1?"current":""} ${st===2?"done":""}"><div class="time">${x[0]&&x[0]!=="custom"?`УРОК ${x[0]}<br>`:""}${x[1]}</div><div><div class="title">${x[2]}</div>${priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}</div><span class="badge ${badge}">${bt}</span></div>`});
- out+="</div>"; if(notes[selected])out+=`<div class="section">Заметка</div><div class="card"><div class="item"><div></div><div class="title">${notes[selected].replace(/</g,"&lt;").replace(/\\n/g,"<br>")}</div></div></div>`;document.getElementById("content").innerHTML=out;
+  renderDays();
+  let d=data[selected],items=allItems(selected);
+  subtitle.textContent=selected===todayKey()?"Сегодня":names[keys.indexOf(selected)];
+  renderHero(d);
+  let html=`<div class="section">${d.school}</div><div class="card">`;
+  if(!items.length)html+=`<div class="empty">На этот день ничего не запланировано</div>`;
+  items.forEach(x=>{
+    let st=nowState(x), priv=isPrivate(x), custom=x[0]==="custom";
+    let badge=custom?"custom":priv?"private":d.type;
+    let badgeText=custom?"Добавлено":priv?"Частное":d.type==="gym"?"Гимназия":d.type==="smart"?"Smart School":"Дело";
+    html+=`<div class="item ${st===1?"current":""} ${st===2?"done":""}">
+      <div class="time">${x[0]&&x[0]!=="custom"?`УРОК ${x[0]}<br>`:""}${x[1]}</div>
+      <div><div class="title">${x[2]}</div>${priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}</div>
+      <span class="badge ${badge}">${badgeText}</span>
+    </div>`
+  });
+  html+="</div>";
+  if(notes[selected])html+=`<div class="section">Заметка</div><div class="card"><div class="item"><div></div><div class="title">${notes[selected].replace(/</g,"&lt;").replace(/\n/g,"<br>")}</div></div></div>`;
+  content.innerHTML=html
 }
-function renderWeek(){
- const el=document.getElementById("weekGrid");el.innerHTML="";
- keys.forEach((k,i)=>{let items=allItems(k),box=document.createElement("div");box.className="weekday";box.innerHTML=`<div class="weekdayhead"><b>${names[i]}${k===todayKey()?" · сегодня":""}</b><span>${items.length?items.length+" дел":"свободно"}</span></div>`+(items.length?items.map(x=>`<div class="weekitem"><b>${x[2]}</b><time>${x[1]}</time></div>`).join(""):`<div style="color:var(--muted);font-size:12px">Нет запланированных дел</div>`);el.appendChild(box)})
-}
-function showView(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.view===id));if(id==="weekView")renderWeek()}
-document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>showView(b.dataset.view));
-document.getElementById("today").onclick=()=>{selected=todayKey();showView("todayView");render()};
-document.getElementById("addEvent").onclick=()=>showView("addView");
-document.getElementById("edit").onclick=()=>{let v=prompt("Заметка для "+names[keys.indexOf(selected)],notes[selected]||"");if(v!==null){if(v.trim())notes[selected]=v.trim();else delete notes[selected];localStorage.setItem("pwa-notes",JSON.stringify(notes));render()}};
-document.getElementById("addNow").onclick=()=>{let title=prompt("Что добавить?");if(!title)return;let time=prompt("Во сколько? Например 18:30 или 18:30–19:30");if(!time||!/\d{1,2}:\d{2}/.test(time))return alert("Укажи время в формате 18:30 или 18:30–19:30.");(customEvents[selected]??=[]).push({title:title.trim(),time:time.trim()});localStorage.setItem("pwa-events",JSON.stringify(customEvents));showView("todayView");render()};
-document.getElementById("addNote").onclick=()=>{showView("todayView");document.getElementById("edit").click()};
+today.onclick=()=>{selected=todayKey();render()};
+edit.onclick=()=>{
+  let v=prompt("Заметка для "+names[keys.indexOf(selected)],notes[selected]||"");
+  if(v!==null){if(v.trim())notes[selected]=v.trim();else delete notes[selected];localStorage.setItem("pwa-notes",JSON.stringify(notes));render()}
+};
+addEvent.onclick=()=>{
+  let title=prompt("Что добавить? Например: Врач, магазин, встреча");
+  if(!title||!title.trim())return;
+  let time=prompt("Во сколько? Например: 18:30 или 18:30–19:30");
+  if(!time||!/\d{1,2}:\d{2}/.test(time))return alert("Укажи время в формате 18:30 или 18:30–19:30.");
+  if(!customEvents[selected])customEvents[selected]=[];
+  customEvents[selected].push({title:title.trim(),time:time.trim()});
+  localStorage.setItem("pwa-events",JSON.stringify(customEvents));
+  render()
+};
 if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js");
 render();setInterval(render,30000);
 </script></body></html>
