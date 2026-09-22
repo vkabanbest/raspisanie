@@ -1,4 +1,4 @@
-const VERSION = 'v21';
+const VERSION = 'v23';
 const CACHE_NAME = `raspisanie-${VERSION}`;
 
 // All URLs are resolved from the service worker itself, so this works both at
