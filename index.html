@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 25.0 -->
+<!-- APP_VERSION: 26.0 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -21,64 +21,18 @@ button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:tra
 .sheet-backdrop{position:fixed;inset:0;background:rgba(20,25,20,.34);backdrop-filter:blur(5px);z-index:20;opacity:0;pointer-events:none;transition:.2s}.sheet-backdrop.open{opacity:1;pointer-events:auto}.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:27px 27px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;transform:translateY(100%);transition:.25s}.sheet-backdrop.open .sheet{transform:translateY(0)}.grab{width:42px;height:5px;background:#cfc9bd;border-radius:8px;margin:2px auto 15px}.sheet h2{margin:0 0 14px;font-size:23px}.field{margin:10px 0}.field label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;margin:0 0 6px 3px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:14px;padding:12px 13px;outline:none;color:var(--text)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.sheet-buttons button{border:0;border-radius:15px;padding:13px;font-weight:800}.cancel{background:#e9e5dc;color:#65685f}.save{background:var(--sage-dark);color:#fff}.danger{background:#f2dddd;color:var(--danger)}
 @media(min-width:600px){body{padding-left:24px;padding-right:24px}.item{padding:16px}.days{justify-content:center}}
 @media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
+<style id="background-animation-v26">
+body{position:relative;overflow-x:hidden;}
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:999px;filter:blur(42px);opacity:.30;will-change:transform;}
+body::before{width:240px;height:240px;left:-80px;top:14vh;background:rgba(111,143,114,.16);animation:floatA 18s ease-in-out infinite alternate;}
+body::after{width:280px;height:280px;right:-100px;bottom:8vh;background:rgba(232,160,110,.12);animation:floatB 22s ease-in-out infinite alternate;}
+@keyframes floatA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(55px,35px,0) scale(1.08)}}
+@keyframes floatB{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-45px,-28px,0) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){body::before,body::after{animation:none}.item,.quick button,.iconbtn,.datebtn{transition:none!important}}
+.item,.quick button,.iconbtn,.datebtn{transition:transform .18s ease,box-shadow .18s ease;}
+.item:active{transform:scale(.995)}
+.quick button:active,.iconbtn:active,.datebtn:active{transform:translateY(1px) scale(.98)}
 </style>
-
-<style id="personal-rules-v25">
-/* /* PERSONAL_RULES_V25 */ */
-.personal-event {
-  border-left: 3px solid rgba(120, 150, 120, .45);
-}
-</style>
-<script id="personal-rules-v25-script">
-(function () {
-  // Personal/individual lessons are always 60 minutes and have no school.
-  window.normalizePersonalEvent = function (ev) {
-    if (!ev || typeof ev !== "object") return ev;
-    const isPersonal =
-      String(ev.type || "").toLowerCase() === "private" ||
-      String(ev.type || "").toLowerCase() === "personal" ||
-      String(ev.title || "").startsWith("Частное:");
-    if (isPersonal) {
-      ev.duration = 60;
-      ev.place = "";
-      ev.school = "";
-      ev.organization = "";
-      if (!ev.end && ev.start) {
-        const m = String(ev.start).match(/^(\d{1,2}):(\d{2})$/);
-        if (m) {
-          let mins = Number(m[1]) * 60 + Number(m[2]) + 60;
-          ev.end = String(Math.floor(mins / 60) % 24).padStart(2,"0") + ":" + String(mins % 60).padStart(2,"0");
-        }
-      }
-    }
-    return ev;
-  };
-})();
-</script>
-
-
-<style id="light-animation-v25">
-@keyframes gentleCardIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.event-card, .card, .schedule-item {
-  animation: gentleCardIn .28s ease-out both;
-}
-button, .day-tab {
-  transition: transform .12s ease, opacity .12s ease;
-}
-button:active, .day-tab:active {
-  transform: scale(.98);
-}
-@media (prefers-reduced-motion: reduce) {
-  .event-card, .card, .schedule-item, button, .day-tab {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -101,11 +55,11 @@ const names=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"], keys=["mon","tue
 // БАЗОВОЕ РАСПИСАНИЕ: это исходные данные приложения. Не удалять и не перезаписывать при миграции.
 const BASE_SCHEDULE={
 mon:{school:"Smart School",type:"smart",items:[["","09:00–11:00","Ресепшн"],["4","12:00–12:40","Урок (5/6м, 1 г)"],["5","12:50–13:30","Урок (5/6м, 2 г)"],["6","13:50–14:30","Урок (6с/7, 1 г)"],["7","14:40–15:20","Урок (6с/7, 2 г)"],["","15:30–17:00","Сампо (7 кл)"],["","16:00–17:00","Прогулка"]]},
-tue:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","16:00","Частное: Полина"],["","17:00","Частное: Соня"],["","18:00","Частное: Максим"]]},
-wed:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","17:00","Частное: Женя"],["","19:00","Частное: Максим"]]},
-thu:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["7","13:40–14:20","Урок"],["","15:00","Частное: Полина"]]},
+tue:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","16:00–17:00","Частное: Полина"],["","17:00–18:00","Частное: Соня"],["","18:00–19:00","Частное: Максим"]]},
+wed:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["","17:00–18:00","Частное: Женя"],["","19:00–20:00","Частное: Максим"]]},
+thu:{school:"Шаховская гимназия",type:"gym",items:[["1","08:30–09:10","Урок"],["2","09:20–10:00","Урок"],["3","10:10–10:50","Урок"],["4","11:00–11:40","Урок"],["5","11:55–12:35","Урок"],["6","12:50–13:30","Урок"],["7","13:40–14:20","Урок"],["","15:00–16:00","Частное: Полина"]]},
 fri:{school:"Smart School",type:"smart",items:[["1","09:30–10:10","Урок (5/6м, 1 г)"],["2","10:20–11:00","Урок (5/6м, 2 г)"],["3","11:10–11:50","Урок (6с/7, 1 г)"],["4","12:00–12:40","Урок (6с/7, 2 г)"],["","12:40–16:10","Ресепшн"],["","16:10","Прогулка"]]},
-sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00","Соня"],["","12:00","Частное: Женя"]]}
+sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00–12:00","Соня"],["","12:00–13:00","Частное: Женя"]]}
 };
 const STORE={events:"pwa-events-v2",notes:"pwa-notes-v2",overrides:"pwa-overrides-v2",legacyEvents:"pwa-events",legacyNotes:"pwa-notes"};
 let events=read(STORE.events,{}), notes=read(STORE.notes,{}), overrides=read(STORE.overrides,{}), editingId=null, editingWeeklyKey=null, searchQuery="";
@@ -135,20 +89,22 @@ function migrateLegacy(){
 migrateLegacy();
 function dateEvents(d){return Array.isArray(events[iso(d)])?events[iso(d)]:[]}
 function weeklyCustom(d){return events.__weekly?.[weekdayKey(d)]||[]}
-function baseItems(d){return BASE_SCHEDULE[weekdayKey(d)].items.map((x,i)=>({id:`base-${weekdayKey(d)}-${i}`,base:true,lesson:x[0],time:x[1],title:x[2],category:BASE_SCHEDULE[weekdayKey(d)].type,location:/Частное/.test(x[2])?"У меня дома":""}));}
+function isPrivate(x){return /^(Частное:|Соня$)/.test(String(x?.title??x?.[2]??""))}
+function addHour(time){let m=mins(time);if(m==null)return time;let end=m+60;return `${pad(Math.floor(m/60)%24)}:${pad(m%60)}–${pad(Math.floor(end/60)%24)}:${pad(end%60)}`}
+function normalizeEvent(x){if(!x)return x;let y={...x};if(isPrivate(y)){y.category="private";y.location="";if(!String(y.time||"").includes("–"))y.time=addHour(y.time)}return y}
+function baseItems(d){return BASE_SCHEDULE[weekdayKey(d)].items.map((x,i)=>normalizeEvent({id:`base-${weekdayKey(d)}-${i}`,base:true,lesson:x[0],time:x[1],title:x[2],category:isPrivate({title:x[2]})?"private":BASE_SCHEDULE[weekdayKey(d)].type,location:""}));}
 function findSourceItem(origin,id){return [...baseItems(dateFromIso(origin)),...weeklyCustom(dateFromIso(origin)).map(x=>({...x,weekly:true})),...dateEvents(dateFromIso(origin))].find(x=>x.id===id)}
-function movedItems(d){let out=[];Object.entries(overrides).forEach(([origin,ov])=>{(ov?.moved||[]).filter(m=>m.targetDate===iso(d)).forEach(m=>{let src=findSourceItem(origin,m.id);if(src)out.push({...src,id:`moved-${origin}-${m.id}`,base:!!src.base,moved:true,originDate:origin,originId:m.id,time:m.time||src.time,originalTime:src.time})})});return out}
+function movedItems(d){let out=[];Object.entries(overrides).forEach(([origin,ov])=>{(ov?.moved||[]).filter(m=>m.targetDate===iso(d)).forEach(m=>{let src=findSourceItem(origin,m.id);if(src)out.push(normalizeEvent({...src,id:`moved-${origin}-${m.id}`,base:!!src.base,moved:true,originDate:origin,originId:m.id,time:m.time||src.time,originalTime:src.time}))})});return out}
 function dayItems(d){
  const date=iso(d),ov=overrides[date]||{};
  const movedOut=new Set((ov.moved||[]).map(m=>m.id));
  const base=baseItems(d).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
- const extra=[...weeklyCustom(d).map(x=>({...x,weekly:true})),...dateEvents(d)].map(x=>({...x,base:false})).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
+ const extra=[...weeklyCustom(d).map(x=>({...x,weekly:true})),...dateEvents(d)].map(x=>normalizeEvent({...x,base:false})).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
  let items=[...base,...extra,...movedItems(d)].sort((a,b)=>(mins(a.time)??9999)-(mins(b.time)??9999));
  if(searchQuery){const q=searchQuery.toLowerCase();items=items.filter(x=>`${x.title} ${x.location||""} ${x.time}`.toLowerCase().includes(q))}
  return items;
 }
-function isPrivate(x){return /Частное|Индивидуальные занятия/.test(x.title)}
-function typeLabel(x){if(x.base)return BASE_SCHEDULE[weekdayKey(selectedDate)].type==="gym"?"Гимназия":BASE_SCHEDULE[weekdayKey(selectedDate)].type==="smart"?"Smart School":"Дело";return x.category==="private"?"Частное":x.category==="work"?"Работа":x.category==="other"?"Другое":"Моё"}
+function typeLabel(x){if(isPrivate(x))return "Частное";if(x.base)return BASE_SCHEDULE[weekdayKey(selectedDate)].type==="gym"?"Гимназия":BASE_SCHEDULE[weekdayKey(selectedDate)].type==="smart"?"Smart School":"Дело";return x.category==="private"?"Частное":x.category==="work"?"Работа":x.category==="other"?"Другое":"Моё"}
 function renderDays(){days.innerHTML="";let base=new Date(selectedDate);base.setDate(base.getDate()-3);for(let i=0;i<7;i++){let d=new Date(base);d.setDate(base.getDate()+i);let b=document.createElement("button"),k=weekdayKey(d),items=dayItems(d),today=iso(d)===iso(new Date());b.className=`day ${iso(d)===iso(selectedDate)?"active ":""}${today?"today":""}`;b.innerHTML=`<b>${names[keys.indexOf(k)]}</b><small>${today?"сегодня":items.length?items.length+" дел":shortDate(d)}</small>`;b.onclick=()=>{selectedDate=d;render()};days.appendChild(b)}}
 function renderHero(d){let items=dayItems(d),cur=items.find(x=>statusFor(x.time,d)===1),next=items.find(x=>statusFor(x.time,d)===0);if(cur){let p=cur.time.split("–"),a=mins(p[0]),b=mins(p[1]||p[0]),n=nowMins(),pct=b>a?Math.max(0,Math.min(100,(n-a)/(b-a)*100)):0;hero.className="hero";hero.innerHTML=`<div class="label">Сейчас · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(cur.title)}</h2><div class="time">${esc(cur.time)}${cur.lesson?` · урок ${esc(cur.lesson)}`:""}</div>${cur.location?`<div class="location">📍 ${esc(cur.location)}</div>`:""}<div class="progress"><i style="width:${pct}%"></i></div>`;return}hero.className="hero next";if(next&&iso(d)===iso(new Date())){let delta=Math.max(0,(mins(next.time)-nowMins()));let when=delta<60?`через ${delta} мин.`:`через ${Math.floor(delta/60)} ч ${delta%60} мин.`;hero.innerHTML=`<div class="label">Ближайшее · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(next.title)}</h2><div class="time">${esc(next.time)}${next.lesson?` · урок ${esc(next.lesson)}`:""}</div>${next.location?`<div class="location">📍 ${esc(next.location)}</div>`:""}<div class="nextline">${when}</div>`}else if(next){hero.innerHTML=`<div class="label">План на ${names[keys.indexOf(weekdayKey(d))]} · ${BASE_SCHEDULE[weekdayKey(d)].school}</div><h2>${esc(next.title)}</h2><div class="time">${esc(next.time)}</div>${next.location?`<div class="location">📍 ${esc(next.location)}</div>`:""}`}else{hero.className="hero";hero.innerHTML=`<div class="label">${esc(BASE_SCHEDULE[weekdayKey(d)].school)}</div><h2>${items.length?"Всё на этот день":"Свободный день"}</h2><div class="time">${items.length?"Все запланированные дела закончились":"Можно отдыхать ✨"}</div>`}}
 function render(){let d=selectedDate,items=dayItems(d);dateTitle.textContent=dateLabel(d);subtitle.textContent=iso(d)===iso(new Date())?"Сегодня":names[keys.indexOf(weekdayKey(d))];renderDays();renderHero(d);let html=`<div class="section">${searchQuery?`Поиск · ${esc(searchQuery)}`:esc(BASE_SCHEDULE[weekdayKey(d)].school)}</div><div class="card">`;if(!items.length)html+=`<div class="empty">${searchQuery?"Ничего не найдено":"На этот день ничего не запланировано"}</div>`;items.forEach(x=>{let st=statusFor(x.time,d),priv=isPrivate(x),custom=!x.base,cls=st===1?"current":st===2?"done":"",moveMeta=x.moved?`<div class="meta">↪ Перенесено с ${shortDate(dateFromIso(x.originDate))}</div>`:"";let actions=x.moved?`<div class="event-actions"><button data-restore="${esc(x.originDate)}" data-restore-id="${esc(x.originId)}">↩ Вернуть</button><button data-cancel="${esc(x.originDate)}" data-cancel-id="${esc(x.originId)}">Отменить</button></div>`:x.base?`<div class="event-actions"><button data-move="${esc(x.id)}">Перенести</button><button data-cancel="${esc(iso(d))}" data-cancel-id="${esc(x.id)}">Отменить</button></div>`:`<div class="event-actions"><button data-edit="${esc(x.id)}">Изменить</button><button data-move="${esc(x.id)}">Перенести</button><button data-duplicate="${esc(x.id)}">Копия</button><button data-delete="${esc(x.id)}">Удалить</button></div>`;html+=`<div class="item ${cls}"><div class="time">${x.lesson?`УРОК ${esc(x.lesson)}<br>`:""}${esc(x.time)}</div><div><div class="title">${esc(x.title)}</div>${x.location?`<div class="meta">📍 ${esc(x.location)}</div>`:priv?`<div class="meta">У меня дома</div>`:custom?`<div class="meta">Моё событие</div>`:""}${moveMeta}${actions}</div><span class="badge ${custom?(x.category||"custom"):priv?"private":x.category}">${typeLabel(x)}</span></div>`});html+=`</div>`;let total=items.length,done=items.filter(x=>statusFor(x.time,d)===2).length;if(total)html+=`<div class="summary"><div class="stat"><b>${total}</b><span>событий</span></div><div class="stat"><b>${done}</b><span>завершено</span></div><div class="stat"><b>${total-done}</b><span>осталось</span></div></div>`;if(notes[iso(d)]||notes.__weekly?.[weekdayKey(d)])html+=`<div class="section">Заметка</div><div class="card"></div></div>`;content.innerHTML=html;content.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));content.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteEvent(b.dataset.delete));content.querySelectorAll("[data-duplicate]").forEach(b=>b.onclick=()=>duplicateEvent(b.dataset.duplicate));content.querySelectorAll("[data-move]").forEach(b=>b.onclick=()=>moveEvent(b.dataset.move));content.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>cancelEvent(b.dataset.cancel,b.dataset.cancelId));content.querySelectorAll("[data-restore]").forEach(b=>b.onclick=()=>restoreEvent(b.dataset.restore,b.dataset.restoreId));document.getElementById("editNote2")?.addEventListener("click",editNote);document.getElementById("deleteNote")?.addEventListener("click",deleteNote)}
@@ -167,7 +123,7 @@ function cancelEvent(sourceDate,id){let item=findSourceItem(sourceDate,id);if(!i
 function restoreEvent(sourceDate,id){let ov=overrides[sourceDate];if(!ov)return;ov.cancelled=(ov.cancelled||[]).filter(x=>x!==id);ov.moved=(ov.moved||[]).filter(m=>m.id!==id);if(!ov.cancelled.length&&!ov.moved.length)delete overrides[sourceDate];save();selectedDate=dateFromIso(sourceDate);render()}
 function editNote(){let old=notes[iso(selectedDate)]||notes.__weekly?.[weekdayKey(selectedDate)]||"";let v=prompt("Заметка на "+dateLabel(selectedDate),old);if(v===null)return;if(v.trim())notes[iso(selectedDate)]=v.trim();else delete notes[iso(selectedDate)];save();render()}
 function deleteNote(){delete notes[iso(selectedDate)];save();render()}
-addEvent.onclick=()=>openSheet();editNote.onclick=editNote;today.onclick=()=>{selectedDate=new Date();selectedDate.setHours(12,0,0,0);render()};prevDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()-1);render()};nextDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()+1);render()};closeSheet.onclick=closeSheet;backdrop.addEventListener("click",e=>{if(e.target===backdrop)closeSheet()});eventForm.onsubmit=e=>{e.preventDefault();let title=fTitle.value.trim(),start=fStart.value,end=fEnd.value;if(!title||!start)return;let obj={id:editingId||crypto.randomUUID?.()||String(Date.now()),title,time:end?`${start}–${end}`:start,location:fLocation.value.trim(),category:fCategory.value};let k=iso(selectedDate);if(editingId&&editingWeeklyKey){events.__weekly[editingWeeklyKey]=(events.__weekly[editingWeeklyKey]||[]).map(x=>x.id===editingId?{...obj,legacy:x.legacy}:x)}else if(editingId){events[k]=events[k]||[];events[k]=events[k].map(x=>x.id===editingId?obj:x)}else{events[k]=events[k]||[];events[k].push(obj)}save();closeSheet();render()};
+addEvent.onclick=()=>openSheet();editNote.onclick=editNote;today.onclick=()=>{selectedDate=new Date();selectedDate.setHours(12,0,0,0);render()};prevDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()-1);render()};nextDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()+1);render()};closeSheet.onclick=closeSheet;backdrop.addEventListener("click",e=>{if(e.target===backdrop)closeSheet()});eventForm.onsubmit=e=>{e.preventDefault();let title=fTitle.value.trim(),start=fStart.value,end=fEnd.value;if(!title||!start)return;let isPriv=fCategory.value==="private";let obj={id:editingId||crypto.randomUUID?.()||String(Date.now()),title,time:isPriv?(end?`${start}–${end}`:addHour(start)):(end?`${start}–${end}`:start),location:isPriv?"":fLocation.value.trim(),category:fCategory.value};let k=iso(selectedDate);if(editingId&&editingWeeklyKey){events.__weekly[editingWeeklyKey]=(events.__weekly[editingWeeklyKey]||[]).map(x=>x.id===editingId?{...obj,legacy:x.legacy}:x)}else if(editingId){events[k]=events[k]||[];events[k]=events[k].map(x=>x.id===editingId?obj:x)}else{events[k]=events[k]||[];events[k].push(obj)}save();closeSheet();render()};
 function exportData(){const payload={format:"raspisanie-user-data",version:2,createdAt:new Date().toISOString(),events,notes,overrides};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`raspisanie-backup-${iso(new Date())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function importData(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(p?.format!=="raspisanie-user-data"||!p.events||typeof p.events!=="object"||!p.notes||typeof p.notes!=="object"||!p.overrides||typeof p.overrides!=="object")throw new Error();if(!confirm("Заменить пользовательские события, заметки и отмены данными из резервной копии? Исходное расписание не изменится."))return;events=p.events;notes=p.notes;overrides=p.overrides;save();render();alert("Данные восстановлены.")}catch{alert("Не удалось прочитать резервную копию. Файл должен быть создан этой PWA.")}};reader.readAsText(file)}
 function search(){const q=prompt("Что найти? Название, место или время",searchQuery);if(q===null)return;searchQuery=q.trim();searchbar.hidden=!searchQuery;searchInput.value=searchQuery;render()}
