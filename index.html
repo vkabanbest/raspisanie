@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 26.0 -->
+<!-- APP_VERSION: 26.1 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -23,11 +23,12 @@ button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:tra
 @media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
 <style id="background-animation-v26">
 body{position:relative;overflow-x:hidden;}
-body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:999px;filter:blur(42px);opacity:.30;will-change:transform;}
-body::before{width:240px;height:240px;left:-80px;top:14vh;background:rgba(111,143,114,.16);animation:floatA 18s ease-in-out infinite alternate;}
-body::after{width:280px;height:280px;right:-100px;bottom:8vh;background:rgba(232,160,110,.12);animation:floatB 22s ease-in-out infinite alternate;}
-@keyframes floatA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(55px,35px,0) scale(1.08)}}
-@keyframes floatB{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-45px,-28px,0) scale(1.06)}}
+body::before,body::after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:999px;filter:blur(34px);will-change:transform;mix-blend-mode:multiply;}
+body::before{width:300px;height:300px;left:-95px;top:10vh;background:rgba(111,143,114,.28);animation:floatA 14s ease-in-out infinite alternate;}
+body::after{width:330px;height:330px;right:-115px;bottom:6vh;background:rgba(232,160,110,.24);animation:floatB 17s ease-in-out infinite alternate;}
+.app{position:relative;z-index:1;}
+@keyframes floatA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(75px,48px,0) scale(1.13)}}
+@keyframes floatB{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-65px,-42px,0) scale(1.12)}}
 @media(prefers-reduced-motion:reduce){body::before,body::after{animation:none}.item,.quick button,.iconbtn,.datebtn{transition:none!important}}
 .item,.quick button,.iconbtn,.datebtn{transition:transform .18s ease,box-shadow .18s ease;}
 .item:active{transform:scale(.995)}
