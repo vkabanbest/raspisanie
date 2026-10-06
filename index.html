@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 24.1 -->
+<!-- APP_VERSION: 25.0 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -22,6 +22,63 @@ button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:tra
 @media(min-width:600px){body{padding-left:24px;padding-right:24px}.item{padding:16px}.days{justify-content:center}}
 @media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
 </style>
+
+<style id="personal-rules-v25">
+/* /* PERSONAL_RULES_V25 */ */
+.personal-event {
+  border-left: 3px solid rgba(120, 150, 120, .45);
+}
+</style>
+<script id="personal-rules-v25-script">
+(function () {
+  // Personal/individual lessons are always 60 minutes and have no school.
+  window.normalizePersonalEvent = function (ev) {
+    if (!ev || typeof ev !== "object") return ev;
+    const isPersonal =
+      String(ev.type || "").toLowerCase() === "private" ||
+      String(ev.type || "").toLowerCase() === "personal" ||
+      String(ev.title || "").startsWith("Частное:");
+    if (isPersonal) {
+      ev.duration = 60;
+      ev.place = "";
+      ev.school = "";
+      ev.organization = "";
+      if (!ev.end && ev.start) {
+        const m = String(ev.start).match(/^(\d{1,2}):(\d{2})$/);
+        if (m) {
+          let mins = Number(m[1]) * 60 + Number(m[2]) + 60;
+          ev.end = String(Math.floor(mins / 60) % 24).padStart(2,"0") + ":" + String(mins % 60).padStart(2,"0");
+        }
+      }
+    }
+    return ev;
+  };
+})();
+</script>
+
+
+<style id="light-animation-v25">
+@keyframes gentleCardIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.event-card, .card, .schedule-item {
+  animation: gentleCardIn .28s ease-out both;
+}
+button, .day-tab {
+  transition: transform .12s ease, opacity .12s ease;
+}
+button:active, .day-tab:active {
+  transform: scale(.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-card, .card, .schedule-item, button, .day-tab {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
