@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 28.0 -->
+<!-- APP_VERSION: 29.1 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Расписание</title>
 <style>
-:root{--bg:#eaf8f4;--bg2:#e8f0fb;--card:rgba(250,255,255,.82);--text:#17343b;--muted:#648087;--line:#d4e9e8;--sage:#20a69a;--sage-dark:#167b83;--sage-soft:#d2f2e9;--olive:#347eb0;--peach:#35a9c0;--peach-soft:#d8f4f6;--cream:#f5fffd;--danger:#b45468;--shadow:0 16px 40px rgba(25,105,116,.12)}
+:root{--bg:#eaf8f4;--bg2:#e8f0fb;--card:rgba(250,255,255,.82);--text:#17343b;--muted:#648087;--line:#d4e9e8;--sage:#20a69a;--sage-dark:#167b83;--sage-soft:#d2f2e9;--olive:#347eb0;--peach:#35a9c0;--peach-soft:#d8f4f6;--cream:#f5fffd;--danger:#b45468;--shadow:0 18px 44px rgba(13,112,132,.15)}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;background:radial-gradient(circle at 100% 0%,rgba(41,170,190,.20),transparent 30%),radial-gradient(circle at 0% 25%,rgba(32,166,154,.18),transparent 32%),linear-gradient(145deg,var(--bg),var(--bg2));padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
 button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:transparent}.app{max-width:760px;margin:auto;padding-bottom:40px}header{padding:20px 3px 12px;display:flex;justify-content:space-between;align-items:center}h1{font-size:35px;line-height:1;letter-spacing:-1.5px;margin:0;font-weight:820}.sub{font-size:14px;color:var(--muted);margin-top:8px;font-weight:650}.iconbtn{width:44px;height:44px;border-radius:15px;border:1px solid rgba(255,255,255,.75);background:rgba(255,252,245,.72);color:var(--sage-dark);font-size:20px;box-shadow:0 7px 20px rgba(75,69,51,.09);backdrop-filter:blur(18px)}
 .datebar{display:flex;align-items:center;gap:8px;margin-bottom:10px}.datebtn{border:0;background:transparent;color:var(--sage-dark);font-weight:800;padding:7px 5px}.date-title{flex:1;text-align:center;font-weight:800;font-size:16px}.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}.day{min-width:58px;border:0;border-radius:17px;background:rgba(255,252,245,.54);padding:9px 8px 8px;color:#81867d;font-weight:750;transition:.2s ease}.day b{display:block;font-size:16px;color:inherit}.day small{display:block;font-size:9px;line-height:12px;margin-top:2px;min-height:12px}.day.active{background:var(--sage-dark);color:#fff;box-shadow:0 8px 18px rgba(63,98,72,.22);transform:translateY(-1px)}.day.today:not(.active) b{color:var(--sage-dark)}.day.today:not(.active){box-shadow:inset 0 0 0 1.5px rgba(111,143,114,.28)}
@@ -21,36 +21,38 @@ button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:tra
 .sheet-backdrop{position:fixed;inset:0;background:rgba(20,25,20,.34);backdrop-filter:blur(5px);z-index:20;opacity:0;pointer-events:none;transition:.2s}.sheet-backdrop.open{opacity:1;pointer-events:auto}.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:27px 27px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;transform:translateY(100%);transition:.25s}.sheet-backdrop.open .sheet{transform:translateY(0)}.grab{width:42px;height:5px;background:#cfc9bd;border-radius:8px;margin:2px auto 15px}.sheet h2{margin:0 0 14px;font-size:23px}.field{margin:10px 0}.field label{display:block;font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;margin:0 0 6px 3px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:14px;padding:12px 13px;outline:none;color:var(--text)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sheet-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.sheet-buttons button{border:0;border-radius:15px;padding:13px;font-weight:800}.cancel{background:#e9e5dc;color:#65685f}.save{background:var(--sage-dark);color:#fff}.danger{background:#f2dddd;color:var(--danger)}
 @media(min-width:600px){body{padding-left:24px;padding-right:24px}.item{padding:16px}.days{justify-content:center}}
 @media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
-<style id="animations-v27">
-/* ВИДИМЫЕ МИКРО-АНИМАЦИИ: фон + нажатия + смена дня */
-body{position:relative;overflow-x:hidden;}
-body::before,body::after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:999px;filter:blur(42px);will-change:transform;}
-body::before{width:310px;height:310px;left:-85px;top:10vh;background:rgba(20,183,157,.28);animation:floatA 11s ease-in-out infinite alternate;}
-body::after{width:340px;height:340px;right:-110px;bottom:7vh;background:rgba(50,145,218,.25);animation:floatB 13s ease-in-out infinite alternate;}
+</style>
+<style id="animations-v29">
+/* Живой океан: мягкие слои света и ненавязчивое движение */
+body{position:relative;overflow-x:hidden;background:radial-gradient(ellipse at 8% 8%,rgba(50,205,170,.22),transparent 34%),radial-gradient(ellipse at 92% 42%,rgba(42,150,220,.20),transparent 38%),linear-gradient(145deg,var(--bg),var(--bg2));background-attachment:fixed;}
+body::before,body::after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:999px;filter:blur(48px);will-change:transform,opacity;}
+body::before{width:340px;height:340px;left:-110px;top:8vh;background:rgba(25,198,163,.30);animation:oceanFloatA 15s ease-in-out infinite alternate;}
+body::after{width:370px;height:370px;right:-125px;bottom:4vh;background:rgba(47,139,220,.27);animation:oceanFloatB 18s ease-in-out infinite alternate;}
 .app{position:relative;z-index:1;}
-@keyframes floatA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(70px,45px,0) scale(1.10)}}
-@keyframes floatB{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-65px,-38px,0) scale(1.08)}}
-/* цветовой акцент и мягкое дыхание интерфейса */
-.hero{background-size:180% 180%;animation:heroGradient 12s ease-in-out infinite alternate;}
-.card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
-.card:active{box-shadow:0 10px 28px rgba(25,105,116,.16);}
-@keyframes heroGradient{from{background-position:0% 40%}to{background-position:100% 60%}}
-/* кнопки */
-button{transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s ease,filter .16s ease;}
-button:active{transform:scale(.93);filter:brightness(.96);}
-.quick button:active,.iconbtn:active{box-shadow:0 2px 8px rgba(75,69,51,.16);}
-.day{transition:transform .22s ease,background .22s ease,color .22s ease,box-shadow .22s ease;}
-.day:active{transform:scale(.91)!important;}
-.datebtn:active{transform:scale(.82);}
-/* смена выбранного дня */
+@keyframes oceanFloatA{0%{transform:translate3d(0,0,0) scale(1);opacity:.72}50%{opacity:1}100%{transform:translate3d(75px,52px,0) scale(1.13);opacity:.82}}
+@keyframes oceanFloatB{0%{transform:translate3d(0,0,0) scale(1);opacity:.72}100%{transform:translate3d(-70px,-48px,0) scale(1.12);opacity:1}}
+.hero{background-size:220% 220%;animation:oceanGradient 13s ease-in-out infinite alternate;box-shadow:0 18px 38px rgba(11,126,143,.24);}
+.hero:before{animation:orbDrift 9s ease-in-out infinite alternate;}
+.card{background:var(--card);border-color:rgba(255,255,255,.72);box-shadow:var(--shadow);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+.item{animation:eventRise .34s both;}
+.item:nth-child(2){animation-delay:.025s}.item:nth-child(3){animation-delay:.05s}.item:nth-child(4){animation-delay:.075s}.item:nth-child(5){animation-delay:.1s}.item:nth-child(6){animation-delay:.125s}.item:nth-child(7){animation-delay:.15s}.item:nth-child(8){animation-delay:.175s}.item:nth-child(n+9){animation-delay:.19s}
+@keyframes oceanGradient{from{background-position:0% 40%}to{background-position:100% 60%}}
+@keyframes orbDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-15px,12px,0)}}
+@keyframes eventRise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+button{transition:transform .17s cubic-bezier(.2,.8,.2,1),box-shadow .17s ease,filter .17s ease;}
+button:active{transform:scale(.94);filter:brightness(.97);}
+.quick button:active,.iconbtn:active{box-shadow:0 3px 10px rgba(14,110,135,.2);}
+.day{transition:transform .23s ease,background .23s ease,color .23s ease,box-shadow .23s ease;}
+.day:active{transform:scale(.92)!important;}
+.datebtn:active{transform:scale(.84);}
 #content,#hero{will-change:transform,opacity;}
 .day-transition-out{animation:dayOut .13s ease forwards;}
-.day-transition-in{animation:dayIn .28s cubic-bezier(.22,.8,.22,1) forwards;}
-.hero.day-transition-in{animation:heroIn .32s cubic-bezier(.22,.8,.22,1) forwards;}
-@keyframes dayOut{to{opacity:.15;transform:translateX(var(--day-dir,0)) scale(.985)}}
+.day-transition-in{animation:dayIn .3s cubic-bezier(.22,.8,.22,1) forwards;}
+.hero.day-transition-in{animation:heroIn .34s cubic-bezier(.22,.8,.22,1) forwards,oceanGradient 13s ease-in-out infinite alternate;}
+@keyframes dayOut{to{opacity:.12;transform:translateX(var(--day-dir,0)) scale(.985)}}
 @keyframes dayIn{from{opacity:0;transform:translateX(var(--day-from,0)) scale(.985)}to{opacity:1;transform:translateX(0) scale(1)}}
-@keyframes heroIn{from{opacity:0;transform:translateY(9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){body::before,body::after,.hero{animation:none}button,.day,#content,#hero,.card{transition:none!important;animation:none!important}}
+@keyframes heroIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){body::before,body::after,.hero,.hero:before{animation:none!important}button,.day,#content,#hero,.card,.item{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
