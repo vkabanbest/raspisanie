@@ -1,4 +1,4 @@
-<!-- APP_VERSION: 32.0 -->
+<!-- APP_VERSION: 33.0 -->
 <!doctype html>
 <html lang="ru">
 <head>
@@ -40,6 +40,20 @@ button,input,textarea,select{font:inherit}button{-webkit-tap-highlight-color:tra
 @keyframes weekIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.week-view,.week-row,.day,.quick button,.item,.undo-toast{animation:none!important;transition:none!important}}
 @media(prefers-color-scheme:dark){:root{--bg:#171a16;--bg2:#20231d;--card:rgba(34,38,31,.93);--text:#f4f1e9;--muted:#a5aa9e;--line:#383c34;--cream:#20231d}.iconbtn,.quick button,.day,.stat{background:rgba(39,43,36,.78);color:#e5e7df}.day.active{background:#dce9d9;color:#28422d}.day.today:not(.active) b{color:#a8c6aa}.card{border-color:rgba(255,255,255,.06)}.gym{background:#30372f;color:#bfd1bd}.smart{background:#243c29;color:#9fcca5}.private{background:#493326;color:#f1bc95}.other{background:#30322d;color:#c0c2b8}.custom{background:#45422d;color:#ddd69d}.field input,.field textarea,.field select{background:#292d27;color:#f4f1e9}.sheet{background:#20231d}}
+
+/* Управление постоянными учениками */
+.students-backdrop{position:fixed;inset:0;z-index:40;background:rgba(12,35,42,.42);backdrop-filter:blur(7px);display:none;align-items:flex-end;justify-content:center}
+.students-backdrop.open{display:flex}
+.students-panel{width:min(100%,560px);max-height:92dvh;overflow:auto;background:var(--cream);border-radius:27px 27px 0 0;padding:14px 17px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -15px 45px rgba(0,0,0,.18)}
+.students-panel h2{margin:4px 0 6px;font-size:23px}.students-help{font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:14px}
+.student-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:14px;background:rgba(255,255,255,.65);margin:7px 0;border:1px solid rgba(255,255,255,.8)}
+.student-row label{display:flex;align-items:center;gap:9px;font-weight:750;font-size:14px;flex:1}.student-row input[type=checkbox]{width:19px;height:19px;accent-color:#118e89}
+.student-row button{border:0;border-radius:10px;padding:7px 10px;background:#f2dddd;color:#984848;font-weight:800}
+.student-form{margin-top:15px;padding:13px;border-radius:18px;background:rgba(15,145,143,.08);border:1px solid rgba(15,145,143,.16)}
+.student-form input[type=text],.student-form input[type=time],.student-form select{width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);margin-top:5px}
+.student-days{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.student-days label{display:flex;align-items:center;gap:5px;padding:7px 9px;border-radius:10px;background:rgba(255,255,255,.8);font-size:12px;font-weight:750}.student-days input{accent-color:#118e89}
+.student-panel-actions{display:flex;gap:8px;margin-top:14px}.student-panel-actions button{flex:1;border:0;border-radius:13px;padding:12px;font-weight:850}.student-close{background:#e9e5dc;color:#65685f}.student-save{background:var(--sage-dark);color:white}
+
 </style>
 <style id="animations-v29">
 /* Живой океан: мягкие слои света и ненавязчивое движение */
@@ -91,6 +105,9 @@ button:active{transform:scale(.94);filter:brightness(.97);}
 <div class="field"><label>Тип</label><select id="fCategory"><option value="custom">Личное</option><option value="private">Частное</option><option value="work">Работа</option><option value="other">Другое</option></select></div>
 <div class="sheet-buttons"><button type="button" class="cancel" id="closeSheet">Отмена</button><button class="save" type="submit">Сохранить</button></div>
 </form></div></div>
+
+<div class="students-backdrop" id="studentsBackdrop"><section class="students-panel" role="dialog" aria-modal="true" aria-labelledby="studentsTitle"><div class="grab"></div><h2 id="studentsTitle">Мои ученики</h2><div class="students-help">Включай и выключай учеников из исходного списка или добавляй новых. Изменения сохраняются только на этом устройстве и не переписывают базовое расписание.</div><div class="section">Ученики из исходного расписания</div><div id="baseStudentsList"></div><div class="section">Добавленные постоянные ученики</div><div id="customStudentsList"></div><div class="student-form"><b>＋ Добавить постоянного ученика</b><div class="field"><label>Имя</label><input id="studentName" type="text" placeholder="Например, Маша"></div><div class="field"><label>Дни недели</label><div class="student-days" id="studentDays"><label><input type="checkbox" value="mon"> Пн</label><label><input type="checkbox" value="tue"> Вт</label><label><input type="checkbox" value="wed"> Ср</label><label><input type="checkbox" value="thu"> Чт</label><label><input type="checkbox" value="fri"> Пт</label><label><input type="checkbox" value="sat"> Сб</label><label><input type="checkbox" value="sun"> Вс</label></div></div><div class="row"><div class="field"><label>Начало</label><input id="studentStart" type="time" value="16:00"></div><div class="field"><label>Конец</label><input id="studentEnd" type="time" value="17:00"></div></div></div><div class="student-panel-actions"><button class="student-close" id="closeStudents" type="button">Закрыть</button><button class="student-save" id="addStudent" type="button">Добавить ученика</button></div></section></div>
+
 <script>
 // Явные ссылки вместо неявных window-переменных по id: надёжнее в Safari/iOS.
 const weekToggle=document.getElementById("weekToggle");
@@ -110,13 +127,18 @@ fri:{school:"Smart School",type:"smart",items:[["1","09:30–10:10","Урок (5
 sat:{school:"Свободный день",type:"other",items:[]},sun:{school:"Свободный день",type:"other",items:[["","11:00–12:00","Соня"],["","12:00–13:00","Частное: Женя"]]}
 };
 const STORE={events:"pwa-events-v2",notes:"pwa-notes-v2",overrides:"pwa-overrides-v2",legacyEvents:"pwa-events",legacyNotes:"pwa-notes"};
+const STUDENTS_STORE="pwa-permanent-students-v1";
+// Первый запуск менеджера: скрываем Максима, не редактируя исходный BASE_SCHEDULE.
+let studentSettings=read(STUDENTS_STORE,null);
+if(!studentSettings){studentSettings={disabled:["Максим"],custom:[]};localStorage.setItem(STUDENTS_STORE,JSON.stringify(studentSettings));}
+
 let events=read(STORE.events,{}), notes=read(STORE.notes,{}), overrides=read(STORE.overrides,{}), editingId=null, editingWeeklyKey=null, searchQuery="";
 let selectedDate=new Date(); selectedDate.setHours(12,0,0,0);
 function read(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}
 function save(){localStorage.setItem(STORE.events,JSON.stringify(events));localStorage.setItem(STORE.notes,JSON.stringify(notes));localStorage.setItem(STORE.overrides,JSON.stringify(overrides))}
 let undoSnapshot=null,undoTimer=null,weekViewMode=false;
-function recordUndo(message="Изменение сохранено"){undoSnapshot={events:JSON.parse(JSON.stringify(events)),notes:JSON.parse(JSON.stringify(notes)),overrides:JSON.parse(JSON.stringify(overrides))};undoText.textContent=message;undoToast.classList.add("show");clearTimeout(undoTimer);undoTimer=setTimeout(()=>undoToast.classList.remove("show"),6500)}
-undoButton.onclick=()=>{if(!undoSnapshot)return;events=undoSnapshot.events;notes=undoSnapshot.notes;overrides=undoSnapshot.overrides;undoSnapshot=null;save();undoToast.classList.remove("show");render();}
+function recordUndo(message="Изменение сохранено"){undoSnapshot={events:JSON.parse(JSON.stringify(events)),notes:JSON.parse(JSON.stringify(notes)),overrides:JSON.parse(JSON.stringify(overrides)),studentSettings:JSON.parse(JSON.stringify(studentSettings))};undoText.textContent=message;undoToast.classList.add("show");clearTimeout(undoTimer);undoTimer=setTimeout(()=>undoToast.classList.remove("show"),6500)}
+undoButton.onclick=()=>{if(!undoSnapshot)return;events=undoSnapshot.events;notes=undoSnapshot.notes;overrides=undoSnapshot.overrides;studentSettings=undoSnapshot.studentSettings||studentSettings;saveStudents();undoSnapshot=null;save();undoToast.classList.remove("show");render();}
 
 function pad(n){return String(n).padStart(2,"0")}
 function iso(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
@@ -144,14 +166,17 @@ function weeklyCustom(d){return events.__weekly?.[weekdayKey(d)]||[]}
 function isPrivate(x){return /^(Частное:|Соня$)/.test(String(x?.title??x?.[2]??""))}
 function addHour(time){let m=mins(time);if(m==null)return time;let end=m+60;return `${pad(Math.floor(m/60)%24)}:${pad(m%60)}–${pad(Math.floor(end/60)%24)}:${pad(end%60)}`}
 function normalizeEvent(x){if(!x)return x;let y={...x};if(isPrivate(y)){y.category="private";y.location="";if(!String(y.time||"").includes("–"))y.time=addHour(y.time)}return y}
+function studentName(x){return String(x?.title??x?.[2]??"").replace(/^Частное:\s*/,"").trim()}
+function saveStudents(){localStorage.setItem(STUDENTS_STORE,JSON.stringify(studentSettings))}
 function baseItems(d){return BASE_SCHEDULE[weekdayKey(d)].items.map((x,i)=>normalizeEvent({id:`base-${weekdayKey(d)}-${i}`,base:true,lesson:x[0],time:x[1],title:x[2],category:isPrivate({title:x[2]})?"private":BASE_SCHEDULE[weekdayKey(d)].type,location:""}));}
-function findSourceItem(origin,id){return [...baseItems(dateFromIso(origin)),...weeklyCustom(dateFromIso(origin)).map(x=>({...x,weekly:true})),...dateEvents(dateFromIso(origin))].find(x=>x.id===id)}
+function recurringStudentItems(d){return (studentSettings.custom||[]).filter(x=>x.enabled!==false&&(x.days||[]).includes(weekdayKey(d))).map(x=>({id:`student-${x.id}-${weekdayKey(d)}`,base:false,permanentStudent:true,studentId:x.id,title:`Частное: ${x.name}`,time:`${x.start}–${x.end}`,location:"",category:"private"}));}
+function findSourceItem(origin,id){return [...baseItems(dateFromIso(origin)),...recurringStudentItems(dateFromIso(origin)),...weeklyCustom(dateFromIso(origin)).map(x=>({...x,weekly:true})),...dateEvents(dateFromIso(origin))].find(x=>x.id===id)}
 function movedItems(d){let out=[];Object.entries(overrides).forEach(([origin,ov])=>{(ov?.moved||[]).filter(m=>m.targetDate===iso(d)).forEach(m=>{let src=findSourceItem(origin,m.id);if(src)out.push(normalizeEvent({...src,id:`moved-${origin}-${m.id}`,base:!!src.base,moved:true,originDate:origin,originId:m.id,time:m.time||src.time,originalTime:src.time}))})});return out}
 function dayItems(d){
  const date=iso(d),ov=overrides[date]||{};
  const movedOut=new Set((ov.moved||[]).map(m=>m.id));
- const base=baseItems(d).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
- const extra=[...weeklyCustom(d).map(x=>({...x,weekly:true})),...dateEvents(d)].map(x=>normalizeEvent({...x,base:false})).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
+ const base=baseItems(d).filter(x=>!(isPrivate(x)&&studentSettings.disabled.includes(studentName(x)))&&!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
+ const extra=[...recurringStudentItems(d),...weeklyCustom(d).map(x=>({...x,weekly:true})),...dateEvents(d)].map(x=>normalizeEvent({...x,base:false})).filter(x=>!ov.cancelled?.includes(x.id)&&!movedOut.has(x.id));
  let items=[...base,...extra,...movedItems(d)].sort((a,b)=>(mins(a.time)??9999)-(mins(b.time)??9999));
  if(searchQuery){const q=searchQuery.toLowerCase();items=items.filter(x=>`${x.title} ${x.location||""} ${x.time}`.toLowerCase().includes(q))}
  return items;
@@ -202,10 +227,19 @@ weekToggle.addEventListener("click",()=>{
   renderNow();
   lastRenderDate=iso(selectedDate);
 });editNote.onclick=editNote;today.onclick=()=>{selectedDate=new Date();selectedDate.setHours(12,0,0,0);render()};prevDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()-1);render()};nextDay.onclick=()=>{selectedDate.setDate(selectedDate.getDate()+1);render()};closeSheet.onclick=closeSheet;backdrop.addEventListener("click",e=>{if(e.target===backdrop)closeSheet()});eventForm.onsubmit=e=>{e.preventDefault();recordUndo(editingId?"Событие изменено":"Событие добавлено");let title=fTitle.value.trim(),start=fStart.value,end=fEnd.value;if(!title||!start)return;let isPriv=fCategory.value==="private";let obj={id:editingId||crypto.randomUUID?.()||String(Date.now()),title,time:isPriv?(end?`${start}–${end}`:addHour(start)):(end?`${start}–${end}`:start),location:isPriv?"":fLocation.value.trim(),category:fCategory.value};let k=iso(selectedDate);if(editingId&&editingWeeklyKey){events.__weekly[editingWeeklyKey]=(events.__weekly[editingWeeklyKey]||[]).map(x=>x.id===editingId?{...obj,legacy:x.legacy}:x)}else if(editingId){events[k]=events[k]||[];events[k]=events[k].map(x=>x.id===editingId?obj:x)}else{events[k]=events[k]||[];events[k].push(obj)}save();closeSheet();render()};
-function exportData(){const payload={format:"raspisanie-user-data",version:2,createdAt:new Date().toISOString(),events,notes,overrides};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`raspisanie-backup-${iso(new Date())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function importData(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(p?.format!=="raspisanie-user-data"||!p.events||typeof p.events!=="object"||!p.notes||typeof p.notes!=="object"||!p.overrides||typeof p.overrides!=="object")throw new Error();if(!confirm("Заменить пользовательские события, заметки и отмены данными из резервной копии? Исходное расписание не изменится."))return;recordUndo("Резервная копия импортирована");events=p.events;notes=p.notes;overrides=p.overrides;save();render();alert("Данные восстановлены.")}catch{alert("Не удалось прочитать резервную копию. Файл должен быть создан этой PWA.")}};reader.readAsText(file)}
+function exportData(){const payload={format:"raspisanie-user-data",version:3,createdAt:new Date().toISOString(),events,notes,overrides,studentSettings};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`raspisanie-backup-${iso(new Date())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function importData(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(p?.format!=="raspisanie-user-data"||!p.events||typeof p.events!=="object"||!p.notes||typeof p.notes!=="object"||!p.overrides||typeof p.overrides!=="object")throw new Error();if(!confirm("Заменить пользовательские события, заметки и отмены данными из резервной копии? Исходное расписание не изменится."))return;recordUndo("Резервная копия импортирована");events=p.events;notes=p.notes;overrides=p.overrides;if(p.studentSettings)studentSettings=p.studentSettings;saveStudents();save();render();alert("Данные восстановлены.")}catch{alert("Не удалось прочитать резервную копию. Файл должен быть создан этой PWA.")}};reader.readAsText(file)}
 function search(){const q=prompt("Что найти? Название, место или время",searchQuery);if(q===null)return;searchQuery=q.trim();searchbar.hidden=!searchQuery;searchInput.value=searchQuery;render()}
-manage.onclick=()=>{const choice=prompt("1 — Найти\n2 — Экспорт резервной копии\n3 — Импорт резервной копии\n4 — Очистить поиск\n\nОтмена — закрыть");if(choice==="1")search();else if(choice==="2")exportData();else if(choice==="3")importInput.click();else if(choice==="4"){searchQuery="";searchbar.hidden=true;render()}}
+
+const studentsBackdrop=document.getElementById("studentsBackdrop"),baseStudentsList=document.getElementById("baseStudentsList"),customStudentsList=document.getElementById("customStudentsList");
+function knownBaseStudents(){const out=new Set();for(const k of keys)for(const x of BASE_SCHEDULE[k].items)if(isPrivate({title:x[2]}))out.add(studentName(x));return [...out].sort((a,b)=>a.localeCompare(b,"ru"))}
+function renderStudents(){baseStudentsList.innerHTML="";knownBaseStudents().forEach(name=>{const row=document.createElement("div");row.className="student-row";const checked=!studentSettings.disabled.includes(name);row.innerHTML=`<label><input type="checkbox" ${checked?"checked":""}> <span>${esc(name)}</span></label><small>${checked?"В расписании":"Отключён"}</small>`;row.querySelector("input").onchange=e=>{recordUndo("Список учеников изменён");studentSettings.disabled=studentSettings.disabled.filter(x=>x!==name);if(!e.target.checked)studentSettings.disabled.push(name);saveStudents();renderStudents();render()};baseStudentsList.appendChild(row)});customStudentsList.innerHTML="";if(!(studentSettings.custom||[]).length)customStudentsList.innerHTML='<div class="empty">Пока никого не добавлено</div>';(studentSettings.custom||[]).forEach(st=>{const row=document.createElement("div");row.className="student-row";row.innerHTML=`<label><input type="checkbox" ${st.enabled!==false?"checked":""}> <span>${esc(st.name)}<small style="display:block;color:var(--muted);font-weight:500">${(st.days||[]).map(k=>names[keys.indexOf(k)]).join(", ")} · ${esc(st.start)}–${esc(st.end)}</small></span></label><button type="button">Удалить</button>`;row.querySelector("input").onchange=e=>{recordUndo("Статус ученика изменён");st.enabled=e.target.checked;saveStudents();renderStudents();render()};row.querySelector("button").onclick=()=>{if(!confirm(`Удалить ${st.name} из постоянных учеников?`))return;recordUndo("Ученик удалён");studentSettings.custom=studentSettings.custom.filter(x=>x.id!==st.id);saveStudents();renderStudents();render()};customStudentsList.appendChild(row)})}
+function openStudents(){renderStudents();studentsBackdrop.classList.add("open")}
+function closeStudents(){studentsBackdrop.classList.remove("open")}
+document.getElementById("closeStudents").onclick=closeStudents;studentsBackdrop.addEventListener("click",e=>{if(e.target===studentsBackdrop)closeStudents()});
+document.getElementById("addStudent").onclick=()=>{const name=document.getElementById("studentName").value.trim(),start=document.getElementById("studentStart").value,end=document.getElementById("studentEnd").value,daysSelected=[...document.querySelectorAll("#studentDays input:checked")].map(x=>x.value);if(!name){alert("Укажи имя ученика.");return}if(!daysSelected.length){alert("Выбери хотя бы один день недели.");return}if(!start||!end||mins(end)<=mins(start)){alert("Проверь время начала и окончания.");return}if(knownBaseStudents().some(x=>x.toLowerCase()===name.toLowerCase())||(studentSettings.custom||[]).some(x=>x.name.toLowerCase()===name.toLowerCase())){alert("Такой ученик уже есть в списке.");return}recordUndo("Постоянный ученик добавлен");studentSettings.custom.push({id:crypto.randomUUID?.()||String(Date.now()),name,days:daysSelected,start,end,enabled:true});saveStudents();document.getElementById("studentName").value="";document.querySelectorAll("#studentDays input").forEach(x=>x.checked=false);renderStudents();render()};
+
+manage.onclick=()=>{const choice=prompt("1 — Найти\n2 — Экспорт резервной копии\n3 — Импорт резервной копии\n4 — Очистить поиск\n5 — Мои ученики\n\nОтмена — закрыть");if(choice==="1")search();else if(choice==="2")exportData();else if(choice==="3")importInput.click();else if(choice==="4"){searchQuery="";searchbar.hidden=true;render()}else if(choice==="5"){openStudents()}}
 importInput.addEventListener("change",e=>{importData(e.target.files?.[0]);e.target.value=""});clearSearch.onclick=()=>{searchQuery="";searchInput.value="";searchbar.hidden=true;render()};searchInput.addEventListener("input",()=>{searchQuery=searchInput.value.trim();render()});
 let touchX=null;document.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].clientX},{passive:true});document.addEventListener("touchend",e=>{if(touchX==null)return;let dx=e.changedTouches[0].clientX-touchX;touchX=null;if(Math.abs(dx)>70){selectedDate.setDate(selectedDate.getDate()+(dx<0?1:-1));render()}} ,{passive:true});
 if("serviceWorker" in navigator){
